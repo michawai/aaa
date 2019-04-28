@@ -27,7 +27,7 @@ jobs:
             #sed  -i "/cli_version:/s/${CURR_MBT_VERSION}/${MBT_VERSION}/" ./configs/version.yaml
             sed  -i "s/${CURR_MBT_VERSION}/${MBT_VERSION}/" ./VERSION
             cat ./VERSION
-            git add ./package.json ./configs/version.yaml ./VERSION
+            git add ./VERSION
             git config user.email "${MBT_REPO_USER_EMAIL}"
             git config user.name "Release Bot"
             git commit -m "Bump version ${MBT_VERSION}"
