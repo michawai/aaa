@@ -20,7 +20,9 @@ jobs:
           name: release new version
           command: |
             git clone --depth 1 https://${MBT_REPO_TOKEN}@github.com/michawai/aaa.git
+            ls -la
             cd aaa
+            la -la
             CURR_MBT_VERSION=$(cat ./VERSION)
             echo "Current release: ${CURR_MBT_VERSION}"
             MBT_VERSION=$(echo $CURR_MBT_VERSION | awk -F. '{$NF = $NF + 1;} 1' | sed 's/ /./g')
@@ -32,7 +34,7 @@ jobs:
             git add ./VERSION
             git config user.email "${MBT_REPO_USER_EMAIL}"
             git config user.name "Release Bot"
-            git commit -m "Bump version ${MBT_VERSION}"
+            git commit -m "[skip ci] Bump version ${MBT_VERSION}"
             # Push quietly to prevent showing the token in log
             git push -q  https://${MBT_REPO_TOKEN}@github.com/michawai/aaa.git develop
       #- run: curl -sL https://git.io/goreleaser | bash
