@@ -37,4 +37,4 @@ workflows:
       - release_new:
             filters:
               branches:
-                only: michawai_test
+                only: develop
