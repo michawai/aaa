@@ -15,14 +15,14 @@ jobs:
       - image: circleci/golang:1.11.5
     working_directory: ~/workdir
     steps:
+      - add_ssh_keys:
+          fingerprints:
+            - "ec:33:aa:a3:be:c2:c1:1e:e0:1e:06:d7:fa:f7:0f:ed"
       - checkout
       - run:
           name: release new version
           command: |
             git clone --depth 1 https://${MBT_REPO_TOKEN}@github.com/michawai/aaa.git
-            ls -la
-            cd aaa
-            ls -la
             CURR_MBT_VERSION=$(cat ./VERSION)
             echo "Current release: ${CURR_MBT_VERSION}"
             MBT_VERSION=$(echo $CURR_MBT_VERSION | awk -F. '{$NF = $NF + 1;} 1' | sed 's/ /./g')
