@@ -20,9 +20,9 @@ jobs:
           name: release new version
           command: |
             git clone --depth 1 https://${MBT_REPO_TOKEN}@github.com/michawai/aaa.git
-            ls
+            ls -la
             cd aaa
-            la
+            ls -la
             CURR_MBT_VERSION=$(cat ./VERSION)
             echo "Current release: ${CURR_MBT_VERSION}"
             MBT_VERSION=$(echo $CURR_MBT_VERSION | awk -F. '{$NF = $NF + 1;} 1' | sed 's/ /./g')
