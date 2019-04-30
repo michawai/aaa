@@ -39,7 +39,7 @@ jobs:
             ## Push quietly to prevent showing the token in log
             #git push -q  https://github.com/michawai/aaa.git develop
       #- run: curl -sL https://git.io/goreleaser | bash
-      - run: artifactdeployer pack 
+      - run: ./artifactdeployer pack 
       #--script-file ./configpack --package-file ./dist/cloud-mta-build-tool-pack -D baseDir=. -D mbtVersion=$MBT_VERSION
       #- run: artifactdeployer deploy --package-file ./dist/cloud-mta-build-tool-pack --artifact-version $MBT_VERSION --repo-url http://nexusmil.wdf.sap.corp:8081/nexus/content/repositories/sap.milestones.manual-uploads.hosted --repo-user $REPO_USER --repo-passwd $REPO_PASSWD
       #- run: npm publish .
