@@ -12,7 +12,7 @@ jobs:
       
   release_new:
     docker:
-      - image: circleci/golang:1.11.5
+      - image: michdock/michtest:0.0.1
     working_directory: ~/workdir
     steps:
       - add_ssh_keys:
@@ -22,23 +22,25 @@ jobs:
       - run:
           name: release new version
           command: |
-            git clone --depth 1 https://github.com/michawai/aaa.git
-            CURR_MBT_VERSION=$(cat ./VERSION)
-            echo "Current release: ${CURR_MBT_VERSION}"
-            MBT_VERSION=$(echo $CURR_MBT_VERSION | awk -F. '{$NF = $NF + 1;} 1' | sed 's/ /./g')
-            echo "New release: ${MBT_VERSION}"
+            ##git clone --depth 1 https://github.com/michawai/aaa.git
+            #CURR_MBT_VERSION=$(cat ./VERSION)
+            #echo "Current release: ${CURR_MBT_VERSION}"
+            #MBT_VERSION=$(echo $CURR_MBT_VERSION | awk -F. '{$NF = $NF + 1;} 1' | sed 's/ /./g')
+            #echo "New release: ${MBT_VERSION}"
             #sed  -i "/\"version\":/s/${CURR_MBT_VERSION}/${MBT_VERSION}/" ./package.json
+            #sed  -i "/\"version\":/s/${CURR_MBT_VERSION}/${MBT_VERSION}/" ./internal/version/version_cfg.go
             #sed  -i "/cli_version:/s/${CURR_MBT_VERSION}/${MBT_VERSION}/" ./configs/version.yaml
-            sed  -i "s/${CURR_MBT_VERSION}/${MBT_VERSION}/" ./VERSION
-            cat ./VERSION
-            git add ./VERSION
-            git config user.email "${MBT_REPO_USER_EMAIL}"
-            git config user.name "Release Bot"
-            git commit -m "[skip ci] Bump version ${MBT_VERSION}"
-            # Push quietly to prevent showing the token in log
-            git push -q  https://github.com/michawai/aaa.git develop
+            #sed  -i "s/${CURR_MBT_VERSION}/${MBT_VERSION}/" ./VERSION
+            #cat ./VERSION
+            #git add ./VERSION
+            #git config user.email "${MBT_REPO_USER_EMAIL}"
+            #git config user.name "Release Bot"
+            #git commit -m "[skip ci] Bump version ${MBT_VERSION}"
+            ## Push quietly to prevent showing the token in log
+            #git push -q  https://github.com/michawai/aaa.git develop
       #- run: curl -sL https://git.io/goreleaser | bash
-      #- run: artifactdeployer pack --script-file ./configpack --package-file ./dist/cloud-mta-build-tool-pack -D baseDir=. -D mbtVersion=$MBT_VERSION
+      - run: artifactdeployer pack 
+      #--script-file ./configpack --package-file ./dist/cloud-mta-build-tool-pack -D baseDir=. -D mbtVersion=$MBT_VERSION
       #- run: artifactdeployer deploy --package-file ./dist/cloud-mta-build-tool-pack --artifact-version $MBT_VERSION --repo-url http://nexusmil.wdf.sap.corp:8081/nexus/content/repositories/sap.milestones.manual-uploads.hosted --repo-user $REPO_USER --repo-passwd $REPO_PASSWD
       #- run: npm publish .
 
