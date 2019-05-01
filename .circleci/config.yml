@@ -39,6 +39,7 @@ jobs:
             ## Push quietly to prevent showing the token in log
             git push -q  https://github.com/michawai/aaa.git develop
             ls -la /bin
+            sudo find / -name "artifactdeployer"
             artifactdeployer
       #- run: curl -sL https://git.io/goreleaser | bash
       - run: artifactdeployer 
