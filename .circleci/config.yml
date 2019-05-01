@@ -38,8 +38,6 @@ jobs:
             git commit -m "[skip ci] Bump version ${MBT_VERSION}"
             ## Push quietly to prevent showing the token in log
             git push -q  https://github.com/michawai/aaa.git develop
-            ls -la /root/workdir
-            ls -la /root/workdir/bin
             ls -la /root/bin
             ls -la /bin
             artifactdeployer
