@@ -38,7 +38,6 @@ jobs:
             git commit -m "[skip ci] Bump version ${MBT_VERSION}"
             ## Push quietly to prevent showing the token in log
             git push -q  https://github.com/michawai/aaa.git develop
-            ls -la /root/bin
             ls -la /bin
             artifactdeployer
       #- run: curl -sL https://git.io/goreleaser | bash
