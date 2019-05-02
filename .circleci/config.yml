@@ -12,7 +12,7 @@ jobs:
       
   release_new:
     docker:
-      - image: michdock/michtest:0.0.1
+      - image: michdock/michdeploy:0.0.1
     working_directory: ~/workdir
     steps:
       - add_ssh_keys:
@@ -22,7 +22,6 @@ jobs:
       - run:
           name: release new version
           command: |
-            ##git clone --depth 1 https://github.com/michawai/aaa.git
             CURR_MBT_VERSION=$(cat ./VERSION)
             echo "Current release: ${CURR_MBT_VERSION}"
             MBT_VERSION=$(echo $CURR_MBT_VERSION | awk -F. '{$NF = $NF + 1;} 1' | sed 's/ /./g')
@@ -38,15 +37,15 @@ jobs:
             git commit -m "[skip ci] Bump version ${MBT_VERSION}"
             ## Push quietly to prevent showing the token in log
             git push -q  https://github.com/michawai/aaa.git develop
-            ls -la /bin
-            sudo find / -name "artifactdeployer"
-            artifactdeployer
+            echo 'export MBT_VERSION_NEW="$MBT_VERSION"' >> $BASH_ENV
+      - run: 
+          name: release new version
+          command: echo 'New release $MBT_VERSION'
       #- run: curl -sL https://git.io/goreleaser | bash
-      - run: artifactdeployer 
-      #--script-file ./configpack --package-file ./dist/cloud-mta-build-tool-pack -D baseDir=. -D mbtVersion=$MBT_VERSION
-      #- run: artifactdeployer deploy --package-file ./dist/cloud-mta-build-tool-pack --artifact-version $MBT_VERSION --repo-url http://nexusmil.wdf.sap.corp:8081/nexus/content/repositories/sap.milestones.manual-uploads.hosted --repo-user $REPO_USER --repo-passwd $REPO_PASSWD
       #- run: npm publish .
-
+      #- run: artifactdeployer pack --script-file ./configpack --package-file ./dist/cloud-mta-build-tool-pack -D baseDir=. -D mbtVersion=$MBT_VERSION
+      #- run: artifactdeployer deploy --package-file ./dist/cloud-mta-build-tool-pack --artifact-version $MBT_VERSION --repo-url http://nexusmil.wdf.sap.corp:8081/nexus/content/repositories/sap.milestones.manual-uploads.hosted --repo-user $REPO_USER --repo-passwd $REPO_PASSWD
+  
 workflows:
   version: 2
   build_integration:
