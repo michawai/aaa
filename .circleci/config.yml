@@ -22,7 +22,8 @@ jobs:
       - run:
           name: bump new version
           command: |        
-            echo 'export MBT_VERSION="0.0.0"' >> $BASH_ENV
+            MBT_VERSION="0.0.0"
+            echo 'export MBT_VERSION' >> $BASH_ENV
             command: echo New release ${MBT_VERSION}
       - run: 
           name: release new version
