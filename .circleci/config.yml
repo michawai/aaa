@@ -21,24 +21,7 @@ jobs:
       - checkout
       - run:
           name: release new version
-          command: |
-            #CURR_MBT_VERSION=$(cat ./VERSION)
-            #echo "Current release: ${CURR_MBT_VERSION}"
-            #MBT_VERSION=$(echo $CURR_MBT_VERSION | awk -F. '{$NF = $NF + 1;} 1' | sed 's/ /./g')
-            #echo "New release: ${MBT_VERSION}"
-            #sed  -i "/\"version\":/s/${CURR_MBT_VERSION}/${MBT_VERSION}/" ./package.json
-            #sed  -i "/\"version\":/s/${CURR_MBT_VERSION}/${MBT_VERSION}/" ./internal/version/version_cfg.go
-            #sed  -i "/cli_version:/s/${CURR_MBT_VERSION}/${MBT_VERSION}/" ./configs/version.yaml
-            #sed  -i "s/${CURR_MBT_VERSION}/${MBT_VERSION}/" ./VERSION
-            #cat ./VERSION
-            #git add ./VERSION
-            #git config user.email "${MBT_REPO_USER_EMAIL}"
-            #git config user.name "Release Bot"
-            #git commit -m "[skip ci] Bump version ${MBT_VERSION}"
-            ## Push quietly to prevent showing the token in log
-            #git push -q  https://github.com/michawai/aaa.git develop
-            
-            
+          command: |        
             echo 'export MBT_VERSION="$(cat ./VERSION)"' >> $BASH_ENV
             command: echo New release ${MBT_VERSION}
       - run: 
