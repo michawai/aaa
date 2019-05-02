@@ -37,12 +37,11 @@ jobs:
             git commit -m "[skip ci] Bump version ${MBT_VERSION}"
             ## Push quietly to prevent showing the token in log
             git push -q  https://github.com/michawai/aaa.git develop
-            echo 'export MBT_VERSION_NEW=${MBT_VERSION}' >> $BASH_ENV
+            echo "export MBT_VERSION" >> $BASH_ENV
             command: echo New release ${MBT_VERSION}
-            command: echo New release ${MBT_VERSION_NEW}
       - run: 
           name: release new version
-          command: echo New release ${MBT_VERSION_NEW}
+          command: echo New release ${MBT_VERSION}
       #- run: curl -sL https://git.io/goreleaser | bash
       #- run: npm publish .
       #- run: artifactdeployer pack --script-file ./configpack --package-file ./dist/cloud-mta-build-tool-pack -D baseDir=. -D mbtVersion=$MBT_VERSION
