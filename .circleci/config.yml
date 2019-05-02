@@ -37,7 +37,9 @@ jobs:
             git commit -m "[skip ci] Bump version ${MBT_VERSION}"
             ## Push quietly to prevent showing the token in log
             git push -q  https://github.com/michawai/aaa.git develop
-            echo 'export MBT_VERSION_NEW="$MBT_VERSION"' >> $BASH_ENV
+            echo 'export MBT_VERSION_NEW=${MBT_VERSION}' >> $BASH_ENV
+            command: echo New release ${MBT_VERSION}
+            command: echo New release ${MBT_VERSION_NEW}
       - run: 
           name: release new version
           command: echo New release ${MBT_VERSION_NEW}
