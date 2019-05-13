@@ -1,7 +1,7 @@
 @Library(['piper-lib', 'piper-lib-os']) _
 
 try {
-    stage("Run Voter") {
+    stage("Upload to Nexus") {
         node {
             sh """
               mkdir tempDir
