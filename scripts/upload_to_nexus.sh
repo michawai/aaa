@@ -1,3 +1,6 @@
+mkdir tempDir
+cd tempDir
+wget https://github.com/michawai/aaa/edit/develop/VERSION
 MBT_VERSION=$(cat ./VERSION)
 echo $MBT_VERSION
 curl -L https://github.com/SAP/cloud-mta-build-tool/releases/download/v${MBT_VERSION}/cloud-mta-build-tool_${MBT_VERSION}_Darwin_amd64.tar.gz -o cloud-mta-build-tool_${MBT_VERSION}_Darwin_amd64.tar.gz
