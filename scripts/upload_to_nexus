@@ -3,10 +3,9 @@
 try {
     stage("Upload to Nexus") {
         node {
+            checkout scm
+            ls -la
             sh """
-              mkdir tempDir
-              cd tempDir
-              wget https://github.com/michawai/aaa/edit/develop/VERSION
               ls -la
               MBT_VERSION=$(cat ./VERSION)
               echo $MBT_VERSION
