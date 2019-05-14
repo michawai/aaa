@@ -1,5 +1,5 @@
               ls -la
-              MBT_VERSION=$(cat ./VERSION)
+              MBT_VERSION=0.2.4
               echo $MBT_VERSION
               curl -L https://github.com/SAP/cloud-mta-build-tool/releases/download/v${MBT_VERSION}/cloud-mta-build-tool_${MBT_VERSION}_Darwin_amd64.tar.gz -o cloud-mta-build-tool_${MBT_VERSION}_Darwin_amd64.tar.gz
               curl -L https://github.com/SAP/cloud-mta-build-tool/releases/download/v${MBT_VERSION}/cloud-mta-build-tool_${MBT_VERSION}_Linux_amd64.tar.gz -o cloud-mta-build-tool_${MBT_VERSION}_Linux_amd64.tar.gz
