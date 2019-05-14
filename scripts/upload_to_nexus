@@ -1,15 +1,27 @@
+#!/usr/bin/env groovy
 @Library(['piper-lib', 'piper-lib-os']) _
+import com.sap.icd.jenkins.Utils
+
+dockerImg = "michdock/michtest:0.0.1"
 
 try {
     stage("Upload to Nexus") {
         node {
-            curl -L https://github.com/SAP/cloud-mta-build-tool/VERSION VERSION
-            MBT_VERSION=$(cat VERSION)
-            curl -L https://github.com/SAP/cloud-mta-build-tool/releases/download/v${MBT_VERSION}/cloud-mta-build-tool_${MBT_VERSION}_Darwin_amd64.tar.gz -o cloud-mta-build-tool_${MBT_VERSION}_Darwin_amd64.tar.gz
-            curl -L https://github.com/SAP/cloud-mta-build-tool/releases/download/v${MBT_VERSION}/cloud-mta-build-tool_${MBT_VERSION}_Linux_amd64.tar.gz -o cloud-mta-build-tool_${MBT_VERSION}_Linux_amd64.tar.gz
-            curl -L https://github.com/SAP/cloud-mta-build-tool/releases/download/v${MBT_VERSION}/cloud-mta-build-tool_${MBT_VERSION}_Windows_amd64.tar.gz -o cloud-mta-build-tool_${MBT_VERSION}_Windows_amd64.tar.gz
-            artifactdeployer pack --script-file configpack --package-file cloud-mta-build-tool-pack -D mbtVersion=$MBT_VERSION
-            artifactdeployer deploy --package-file cloud-mta-build-tool-pack --artifact-version $MBT_VERSION --repo-url http://nexusmil.wdf.sap.corp:8081/nexus/content/repositories/sap.milestones.manual-uploads.hosted --repo-user $MVN_REPO_USER --repo-passwd $MVN_REPO_PASSWD
+            deleteDir()
+            def dockerImage = dockerImg
+            measureDuration(script: this, measurementName: 'build_duration') {
+                executeDocker(dockerImage: dockerImage) {
+                    sh """
+                        curl -L https://github.com/SAP/cloud-mta-build-tool/VERSION VERSION
+                        MBT_VERSION=$(cat VERSION)
+                        curl -L https://github.com/SAP/cloud-mta-build-tool/releases/download/v${MBT_VERSION}/cloud-mta-build-tool_${MBT_VERSION}_Darwin_amd64.tar.gz -o cloud-mta-build-tool_${MBT_VERSION}_Darwin_amd64.tar.gz
+                        curl -L https://github.com/SAP/cloud-mta-build-tool/releases/download/v${MBT_VERSION}/cloud-mta-build-tool_${MBT_VERSION}_Linux_amd64.tar.gz -o cloud-mta-build-tool_${MBT_VERSION}_Linux_amd64.tar.gz
+                        curl -L https://github.com/SAP/cloud-mta-build-tool/releases/download/v${MBT_VERSION}/cloud-mta-build-tool_${MBT_VERSION}_Windows_amd64.tar.gz -o cloud-mta-build-tool_${MBT_VERSION}_Windows_amd64.tar.gz
+                        artifactdeployer pack --script-file configpack --package-file cloud-mta-build-tool-pack -D mbtVersion=$MBT_VERSION
+                        artifactdeployer deploy --package-file cloud-mta-build-tool-pack --artifact-version $MBT_VERSION --repo-url http://nexusmil.wdf.sap.corp:8081/nexus/content/repositories/sap.milestones.manual-uploads.hosted --repo-user $MVN_REPO_USER --repo-passwd $MVN_REPO_PASSWD
+                    """
+                }
+            }
         }
     }
 } catch(Exception error) {
