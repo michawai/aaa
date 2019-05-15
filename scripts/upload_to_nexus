@@ -7,7 +7,6 @@ dockerImg = "michdock/michdeploy:0.0.1"
 try {
 
     pipeline {
-        agent any
 
         environment {
             MBT_VERSION = "0.2.5"
