@@ -5,17 +5,15 @@ import com.sap.icd.jenkins.Utils
 dockerImg = "michdock/michtest:0.0.1"
 
 try {
-    agent any
-    environment { 
-        MBT_VER = """${sh(
-            returnStdout: true,
-            script: 'curl -L https://raw.githubusercontent.com/SAP/cloud-mta-build-tool/master/VERSION'
-        )}"""
-    }
     stage("Upload to Nexus") {
         node {
             deleteDir()
             def dockerImage = dockerImg
+            def MBT_VER = """${sh(
+                returnStdout: true,
+                script: 'curl -L https://raw.githubusercontent.com/SAP/cloud-mta-build-tool/master/VERSION'
+            )}"""
+            echo "MBT_VER: ${MBT_VER}"
             measureDuration(script: this, measurementName: 'build_duration') {
                 executeDocker(dockerImage: dockerImage) {
                     sh """
