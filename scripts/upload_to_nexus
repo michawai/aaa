@@ -63,10 +63,10 @@ try {
                 }
             }
         }
-    } catch(Exception error) {
-        mail body: """The upload of MBT to nexust is failing and requires your attention.
-        Regards,
-        FMS JaaS Server""".stripIndent().trim(), subject: 'MBT upload to nexus has failed!', to: 'michal.tall@sap.com'
-        throw error;
     }
+} catch(Exception error) {
+    mail body: """The upload of MBT to nexust is failing and requires your attention.
+    Regards,
+    FMS JaaS Server""".stripIndent().trim(), subject: 'MBT upload to nexus has failed!', to: 'michal.tall@sap.com'
+    throw error;
 }
