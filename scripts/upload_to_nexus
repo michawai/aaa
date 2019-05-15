@@ -3,6 +3,7 @@
 import com.sap.icd.jenkins.Utils
 
 dockerImg = "michdock/michtest:0.0.1"
+MBT_VERSION = ""
 
 try {
     stage("Upload to Nexus") {
