@@ -3,14 +3,12 @@
 import com.sap.icd.jenkins.Utils
 
 dockerImg = "michdock/michdeploy:0.0.1"
+MBT_VERSION = "0.2.5"
+CURR_MBT_VERSION = ""
 
 try {
 
     pipeline {
-
-        environment {
-            MBT_VERSION = "0.2.5"
-        }
 
         stage("Upload to Nexus") {
             node {
@@ -50,11 +48,11 @@ try {
                         git clone https://github.wdf.sap.corp/devx-wing/mta-tools.git
                         cd mta-tools
                         git checkout -b update_mbt_\$MBT_VERSION
-                        sed  -i "/RUN curl -L "https://github.com/SAP/cloud-mta-build-tool/releases/download/s/${CURR_MBT_VERSION}/${MBT_VERSION}/" ./Dockerfile
+                        sed  -i "/RUN curl -L "https://github.com/SAP/cloud-mta-build-tool/releases/download/s/\${CURR_MBT_VERSION}/\${MBT_VERSION}/" ./Dockerfile
                         git add ./Dockerfile
-                        git config user.email "${USERNAME}"
-                        git config user.name "${PASSWORD}"
-                        git commit -m "Update MBT version ${MBT_VERSION}"
+                        git config user.email "\${USERNAME}"
+                        git config user.name "\${PASSWORD}"
+                        git commit -m "Update MBT version \${MBT_VERSION}"
                         #Push quietly to prevent showing the token in log
                         git push -q https://github.wdf.sap.corp/devx-wing/mta-tools.git update_mbt_\$MBT_VERSION
      #                   git request-pull master ./
