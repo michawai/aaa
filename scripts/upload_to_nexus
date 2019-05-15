@@ -4,14 +4,15 @@ import com.sap.icd.jenkins.Utils
 
 dockerImg = "michdock/michdeploy:0.0.1"
 
-pipeline {
-    agent any
-    
-    enviroment {
-        MBT_VERSION = "0.2.5"
-    }
-    
-    try {
+try {
+
+    pipeline {
+        agent any
+
+        environment {
+            MBT_VERSION = "0.2.5"
+        }
+
         stage("Upload to Nexus") {
             node {
                 deleteDir()
@@ -68,5 +69,4 @@ pipeline {
         FMS JaaS Server""".stripIndent().trim(), subject: 'MBT upload to nexus has failed!', to: 'michal.tall@sap.com'
         throw error;
     }
-    
 }
