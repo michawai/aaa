@@ -6,13 +6,15 @@ dockerImg = "michdock/michtest:0.0.1"
 
 try {
     stage("Upload to Nexus") {
-        node {
-            deleteDir()
-            def dockerImage = dockerImg
-            def MBT_VERSION = """${sh(
+        environment {
+            MBT_VERSION = """${sh(
                 returnStdout: true,
                 script: 'curl -L https://raw.githubusercontent.com/SAP/cloud-mta-build-tool/master/VERSION'
             )}"""
+        }
+        node {
+            deleteDir()
+            def dockerImage = dockerImg
             echo "MBT_VERSION: ${MBT_VERSION}"
             measureDuration(script: this, measurementName: 'build_duration') {
                 executeDocker(dockerImage: dockerImage) {
