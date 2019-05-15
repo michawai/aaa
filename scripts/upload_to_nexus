@@ -40,7 +40,7 @@ try {
                     git clone https://github.wdf.sap.corp/devx-wing/mta-tools.git
                     cd mta-tools
                     git checkout -b update_mbt_\$MBT_VERSION
-                    sed  -i "/RUN curl -L "https:\/\/github.com\/SAP\/cloud-mta-build-tool\/releases\/download\/v/s/${CURR_MBT_VERSION}/${MBT_VERSION}/" ./Dockerfile
+                    sed  -i "/RUN curl -L "https://github.com/SAP/cloud-mta-build-tool/releases/download/s/${CURR_MBT_VERSION}/${MBT_VERSION}/" ./Dockerfile
                     sed  -i "s/${CURR_MBT_VERSION}/${MBT_VERSION}/" ./Dockerfile
                     git add ./Dockerfile
                     git config user.email "${USERNAME}"
