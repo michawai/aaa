@@ -5,20 +5,21 @@ import com.sap.icd.jenkins.Utils
 dockerImg = "michdock/michtest:0.0.1"
 
 try {
+    agent any
+    environment { 
+        MBT_VER = """${sh(
+            returnStdout: true,
+            script: 'curl -L https://raw.githubusercontent.com/SAP/cloud-mta-build-tool/master/VERSION'
+        )}"""
+    }
     stage("Upload to Nexus") {
         node {
             deleteDir()
             def dockerImage = dockerImg
-            def mbtVersion = """${sh(
-                returnStdout: true,
-                script: 'echo "clang"'
-            )}"""
             measureDuration(script: this, measurementName: 'build_duration') {
                 executeDocker(dockerImage: dockerImage) {
                     sh """
-                        curl -L https://raw.githubusercontent.com/SAP/cloud-mta-build-tool/master/VERSION -o VERSION
-                        ls -la
-                        MBT_VERSION=\$(<VERSION)
+                        MBT_VERSION=\$MBT_VER
                         echo \${MBT_VERSION}
                         curl -L https://github.com/SAP/cloud-mta-build-tool/releases/download/v\${MBT_VERSION}/cloud-mta-build-tool_\${MBT_VERSION}_Darwin_amd64.tar.gz -o cloud-mta-build-tool_\${MBT_VERSION}_Darwin_amd64.tar.gz
                         curl -L https://github.com/SAP/cloud-mta-build-tool/releases/download/v\${MBT_VERSION}/cloud-mta-build-tool_\${MBT_VERSION}_Linux_amd64.tar.gz -o cloud-mta-build-tool_\${MBT_VERSION}_Linux_amd64.tar.gz
