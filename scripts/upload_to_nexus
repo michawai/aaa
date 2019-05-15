@@ -1,9 +1,9 @@
-#!/usr/bin/env groovy
+#!groovy
 @Library(['piper-lib', 'piper-lib-os']) _
 import com.sap.icd.jenkins.Utils
 
 dockerImg = "michdock/michdeploy:0.0.1"
-MBT_VERSION = "0.2.4"
+def MBT_VERSION = "0.2.4"
 
 try {
     stage("Upload to Nexus") {
