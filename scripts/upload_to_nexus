@@ -2,7 +2,7 @@
 @Library(['piper-lib', 'piper-lib-os']) _
 import com.sap.icd.jenkins.Utils
 
-dockerImg = "michdock/michtest:0.0.1"
+dockerImg = "michdock/michdeploy:0.0.1"
 MBT_VERSION = ""
 
 try {
