@@ -1,5 +1,5 @@
 #!groovy
-@Library(['piper-lib', 'piper-lib-os']) _
+@Library(['piper-lib']) _
 import com.sap.icd.jenkins.Utils
 
 dockerImg = "michdock/michdeploy:0.0.1"
