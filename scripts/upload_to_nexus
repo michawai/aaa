@@ -3,7 +3,7 @@
 import com.sap.icd.jenkins.Utils
 
 dockerImg = "michdock/michdeploy:0.0.1"
-MBT_VERSION = ""
+MBT_VERSION = "0.2.4"
 
 try {
     stage("Upload to Nexus") {
@@ -17,13 +17,12 @@ try {
 #                            echo \$MBT_VERSION
 #                            curl -L https://raw.githubusercontent.com/SAP/cloud-mta-build-tool/master/VERSION -o VERSION
 #                            MBT_VERSION=\$(cat VERSION)
-                            MBT_VERSION=0.2.4
-                            curl -L https://raw.githubusercontent.com/SAP/cloud-mta-build-tool/master/scripts/configpack -o configpack
+#                            curl -L https://raw.githubusercontent.com/SAP/cloud-mta-build-tool/master/scripts/configpack -o configpack
                             curl -L https://github.com/SAP/cloud-mta-build-tool/releases/download/v\${MBT_VERSION}/cloud-mta-build-tool_\${MBT_VERSION}_Darwin_amd64.tar.gz -o cloud-mta-build-tool_\${MBT_VERSION}_Darwin_amd64.tar.gz
-                            curl -L https://github.com/SAP/cloud-mta-build-tool/releases/download/v\${MBT_VERSION}/cloud-mta-build-tool_\${MBT_VERSION}_Linux_amd64.tar.gz -o cloud-mta-build-tool_\${MBT_VERSION}_Linux_amd64.tar.gz
-                            curl -L https://github.com/SAP/cloud-mta-build-tool/releases/download/v\${MBT_VERSION}/cloud-mta-build-tool_\${MBT_VERSION}_Windows_amd64.tar.gz -o cloud-mta-build-tool_\${MBT_VERSION}_Windows_amd64.tar.gz
-                            artifactdeployer pack --script-file configpack --package-file ./cloud-mta-build-tool-pack -D mbtVersion=\$MBT_VERSION                          
-                            artifactdeployer deploy --package-file ./cloud-mta-build-tool-pack --artifact-version \$MBT_VERSION --repo-url http://nexusmil.wdf.sap.corp:8081/nexus/content/repositories/sap.milestones.manual-uploads.hosted --repo-user \$USER --repo-passwd \$PASSWORD
+#                            curl -L https://github.com/SAP/cloud-mta-build-tool/releases/download/v\${MBT_VERSION}/cloud-mta-build-tool_\${MBT_VERSION}_Linux_amd64.tar.gz -o cloud-mta-build-tool_\${MBT_VERSION}_Linux_amd64.tar.gz
+#                            curl -L https://github.com/SAP/cloud-mta-build-tool/releases/download/v\${MBT_VERSION}/cloud-mta-build-tool_\${MBT_VERSION}_Windows_amd64.tar.gz -o cloud-mta-build-tool_\${MBT_VERSION}_Windows_amd64.tar.gz
+#                            artifactdeployer pack --script-file configpack --package-file ./cloud-mta-build-tool-pack -D mbtVersion=\$MBT_VERSION                          
+#                            artifactdeployer deploy --package-file ./cloud-mta-build-tool-pack --artifact-version \$MBT_VERSION --repo-url http://nexusmil.wdf.sap.corp:8081/nexus/content/repositories/sap.milestones.manual-uploads.hosted --repo-user \$USER --repo-passwd \$PASSWORD
                         """
                     }
                 }
@@ -33,6 +32,26 @@ try {
     stage("Update WING") {
         node {
             deleteDir()
+            withCredentials([usernamePassword(credentialsId: 'github_user_config', passwordVariable: 'PASSWORD', usernameVariable: 'USER')]) {
+                sh """
+                    CURR_MBT_VERSION=$(grep '^RUN curl -L "https://github.com/SAP/cloud-mta-build-tool' ./Dockerfile) |  CURR_MBT_VERSION=${CURR_MBT_VERSION:76:5}
+                    echo CURR_MBT_VERSION \$CURR_MBT_VERSION
+                    echo MBT_VERSION \$MBT_VERSION
+                    git clone https://github.wdf.sap.corp/devx-wing/mta-tools.git
+                    cd mta-tools
+                    git checkout -b update_mbt_\$MBT_VERSION
+                    sed  -i "/\"version\":/s/${CURR_MBT_VERSION}/${MBT_VERSION}/" ./Dockerfile
+                    sed  -i "s/${CURR_MBT_VERSION}/${MBT_VERSION}/" ./Dockerfile
+                    git add ./Dockerfile
+                    git config user.email "${USERNAME}"
+                    git config user.name "${PASSWORD}"
+                    git commit -m "Update MBT version ${MBT_VERSION}"
+                    #Push quietly to prevent showing the token in log
+                    git push -q https://github.wdf.sap.corp/devx-wing/mta-tools.git update_mbt_\$MBT_VERSION
+ #                   git request-pull master ./
+ #                   hub pull-request
+                """
+            }
         }
     }
 } catch(Exception error) {
