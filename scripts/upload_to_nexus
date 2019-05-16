@@ -46,9 +46,8 @@ try {
                         echo \$CURR_MBT_VERSION
                         CURR_MBT_VERSION=\$(echo \$CURR_MBT_VERSION | cut -c77-81)
                         echo \$CURR_MBT_VERSION
-                        echo "Update from \$CURR_MBT_VERSION to \$CURR_MBT_VERSION"
                         git checkout -b update_mbt_\$MBT_VERSION
-                        sed  -i "/RUN curl -L "https://github.com/SAP/cloud-mta-build-tool/releases/download/s/\${CURR_MBT_VERSION}/\${MBT_VERSION}/" ./Dockerfile
+                        sed  -i "/RUN curl -L \"https://github.com/SAP/cloud-mta-build-tool/releases/download/s/\${CURR_MBT_VERSION}/\${MBT_VERSION}/" ./Dockerfile
                         git add ./Dockerfile
                         git config user.email "\${USERNAME}"
                         git config user.name "\${PASSWORD}"
