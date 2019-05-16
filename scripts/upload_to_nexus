@@ -17,9 +17,9 @@ try {
                         script {
                             withCredentials([usernamePassword(credentialsId: 'nexus_upload_user', passwordVariable: 'PASSWORD', usernameVariable: 'USER')]) {
                                 sh """
-        #                            curl -L https://raw.githubusercontent.com/SAP/cloud-mta-build-tool/master/VERSION -o VERSION
-        #                            MBT_VERSION=\$(cat VERSION)
-        #                            curl -L https://raw.githubusercontent.com/SAP/cloud-mta-build-tool/master/scripts/configpack -o configpack
+                                    curl -L https://raw.githubusercontent.com/SAP/cloud-mta-build-tool/master/VERSION -o VERSION
+                                    MBT_VERSION=\$(cat VERSION)
+                                    curl -L https://raw.githubusercontent.com/SAP/cloud-mta-build-tool/master/scripts/configpack -o configpack
                                     curl -L https://github.com/SAP/cloud-mta-build-tool/releases/download/v\${MBT_VERSION}/cloud-mta-build-tool_\${MBT_VERSION}_Darwin_amd64.tar.gz -o cloud-mta-build-tool_\${MBT_VERSION}_Darwin_amd64.tar.gz
         #                            curl -L https://github.com/SAP/cloud-mta-build-tool/releases/download/v\${MBT_VERSION}/cloud-mta-build-tool_\${MBT_VERSION}_Linux_amd64.tar.gz -o cloud-mta-build-tool_\${MBT_VERSION}_Linux_amd64.tar.gz
         #                            curl -L https://github.com/SAP/cloud-mta-build-tool/releases/download/v\${MBT_VERSION}/cloud-mta-build-tool_\${MBT_VERSION}_Windows_amd64.tar.gz -o cloud-mta-build-tool_\${MBT_VERSION}_Windows_amd64.tar.gz
@@ -44,7 +44,7 @@ try {
                         cd mta-tools
                         CURR_MBT_VERSION=\$(grep '^RUN curl -L "https://github.com/SAP/cloud-mta-build-tool' Dockerfile)
                         echo \$CURR_MBT_VERSION
-                        CURR_MBT_VERSION=\${CURR_MBT_VERSION:76}
+                        CURR_MBT_VERSION=echo \${CURR_MBT_VERSION:76:5}
                         echo \$CURR_MBT_VERSION
                         echo "Update from \$CURR_MBT_VERSION to \$CURR_MBT_VERSION"
                         git checkout -b update_mbt_\$MBT_VERSION
