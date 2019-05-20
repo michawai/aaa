@@ -10,7 +10,7 @@ jobs:
     steps:
       - checkout
       
-  release_new:
+  deploy:
     docker:
       - image: michdock/michdeploy:0.0.1
     working_directory: ~/workdir
@@ -39,9 +39,9 @@ workflows:
   
   release:
     jobs:
-      - release_new:
+      - deploy:
             filters:
               branches:
                 ignore: /.*/
               tags:
-                only: /^v[0-9]+(\.[0-9]+)+(\.[0-9]+)/
+                only: /^v*/
