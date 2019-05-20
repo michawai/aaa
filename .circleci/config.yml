@@ -10,7 +10,7 @@ jobs:
     steps:
       - checkout
       
-  release:
+  deploy:
     docker:
       - image: michdock/michdeploy:0.0.1
     working_directory: ~/workdir
@@ -37,17 +37,15 @@ workflows:
     jobs:
       - build
 
-  release_new:
+  build_and_deploy:
     jobs:
       - build:
+          filters:  # required since `deploy` has tag filters AND requires `build`
+            tags:
+              only: /.*/
+      - deploy:
           filters:
-            branches:
-              ignore: /.*/
             tags:
               only: /^v*/
-      - release:
-          filters:
             branches:
               ignore: /.*/
-            tags:
-              only: /^v*/
