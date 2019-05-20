@@ -36,6 +36,9 @@ workflows:
   build_integration:
     jobs:
       - build
+
+  release:
+    jobs:
       - deploy:
           filters:
             branches:
