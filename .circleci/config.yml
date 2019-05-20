@@ -10,7 +10,7 @@ jobs:
     steps:
       - checkout
       
-  deploy:
+  release:
     docker:
       - image: michdock/michdeploy:0.0.1
     working_directory: ~/workdir
@@ -37,9 +37,9 @@ workflows:
     jobs:
       - build
 
-  release:
+  release_new:
     jobs:
-      - deploy:
+      - release:
           filters:
             branches:
               ignore: /.*/
