@@ -39,7 +39,7 @@ workflows:
 
   release_new:
     jobs:
-      - build
+      - build:
           filters:
             branches:
               ignore: /.*/
