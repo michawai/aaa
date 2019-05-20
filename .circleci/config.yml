@@ -40,8 +40,8 @@ workflows:
   release:
     jobs:
       - deploy:
-            filters:
-              branches:
-                only: master
-              tags:
-                only: /^v*/
+          filters:
+            branches:
+              ignore: /.*/
+            tags:
+              only: /^v*/
