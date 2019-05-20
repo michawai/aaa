@@ -40,6 +40,8 @@ workflows:
             tags:
               only: /^v*/
       - deploy:
+          requires:
+            - build
           filters:
             tags:
               only: /^v*/
