@@ -1,0 +1,45 @@
+#!groovy
+@Library(['piper-lib']) _
+import com.sap.icd.jenkins.Utils
+
+dockerImg = "michdock/michdeploy:0.0.1"
+
+try {
+
+    pipeline {
+
+        
+        stage("Update WING") {
+            node {
+                deleteDir()
+                withCredentials([usernamePassword(credentialsId: 'github_user_config', passwordVariable: 'PASSWORD', usernameVariable: 'USER')]) {
+                    sh """
+                        curl -L https://raw.githubusercontent.com/SAP/cloud-mta-build-tool/master/VERSION -o VERSION
+                        MBT_VERSION=\$(cat VERSION)
+                        git clone https://github.wdf.sap.corp/devx-wing/mta-tools.git
+                        cd mta-tools
+                        CURR_MBT_VERSION=\$(grep '^RUN curl -L "https://github.com/SAP/cloud-mta-build-tool' Dockerfile)
+                        echo \$CURR_MBT_VERSION
+                        CURR_MBT_VERSION=\$(echo \$CURR_MBT_VERSION | cut -c77-81)
+                        echo \$CURR_MBT_VERSION
+                        git checkout -b update_mbt_\$MBT_VERSION
+                        #sed -i '/RUN curl -L "https://github.com/SAP/cloud-mta-build-tool/ s/\${CURR_MBT_VERSION}/\${MBT_VERSION}/g' ./Dockerfile
+                        git add ./Dockerfile
+                        git config user.email "\${USERNAME}"
+                        git config user.name "\${PASSWORD}"
+                        git commit -m "Update MBT version \${MBT_VERSION}"
+                        #Push quietly to prevent showing the token in log
+                        git push -q https://github.wdf.sap.corp/devx-wing/mta-tools.git update_mbt_\$MBT_VERSION
+     #                   git request-pull master ./
+     #                   hub pull-request
+                    """
+                }
+            }
+        }
+    }
+} catch(Exception error) {
+    mail body: """The upload of MBT to nexust is failing and requires your attention.
+    Regards,
+    FMS JaaS Server""".stripIndent().trim(), subject: 'MBT upload to nexus has failed!', to: 'michal.tall@sap.com'
+    throw error;
+}
