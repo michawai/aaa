@@ -56,9 +56,11 @@ workflows:
       - build:
           filters:  # required since `deploy` has tag filters AND requires `build`
             tags:
-              only: /^v[0-9]+(\.[0-9])+(\.[0-9])/
+              only: /^v*/
             branches:
-              only: /^v[0-9]+(\.[0-9])+(\.[0-9])/
+              only: /.^v*/
+#            branches:
+#              only: /^v[0-9]+(\.[0-9])+(\.[0-9])/
 #            branches:
 #              ignore: /.*/
       - test:
@@ -66,9 +68,11 @@ workflows:
             - build
           filters:  # required since `deploy` has tag filters AND requires `test`
             tags:
-              only: /^v[0-9]+(\.[0-9])+(\.[0-9])/
+              only: /^v*/
             branches:
-              only: /^v[0-9]+(\.[0-9])+(\.[0-9])/
+              only: /.^v*/
+#            branches:
+#              only: /^v*/
 #            branches:
 #              ignore: /.*/
       - deploy:
@@ -76,8 +80,8 @@ workflows:
             - test
           filters:
             tags:
-              only: /^v[0-9]+(\.[0-9])+(\.[0-9])/
+              only: /^v*/
 #            branches:
 #              only: /^v[0-9]+(\.[0-9])+(\.[0-9])/
             branches:
-              only: /.^v[0-9]+(\.[0-9])+(\.[0-9])/
+              only: /.^v*/
