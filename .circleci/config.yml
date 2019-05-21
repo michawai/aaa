@@ -56,7 +56,7 @@ workflows:
       - build:
           filters:  # required since `deploy` has tag filters AND requires `build`
             tags:
-              only: /.*/
+              only: /^v*/
             branches:
               ignore: /.*/
       - test:
@@ -64,7 +64,7 @@ workflows:
             - build
           filters:  # required since `deploy` has tag filters AND requires `test`
             tags:
-              only: /.*/
+              only: /^v*/
             branches:
               ignore: /.*/
       - deploy:
@@ -72,6 +72,6 @@ workflows:
             - test
           filters:
             tags:
-              only: /.*/
+              only: /^v*/
             branches:
-              only: /.^kuku/
+              only: /.^v*/
