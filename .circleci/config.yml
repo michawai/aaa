@@ -74,4 +74,4 @@ workflows:
             tags:
               only: /.*/
             branches:
-              only: /.^v[0-9]+(\.[0-9])+(\.[0-9])/
+              only: /.^kuku/
