@@ -9,6 +9,10 @@ jobs:
     working_directory: ~/workdir
     steps:
       - checkout
+  test:
+    steps:
+      - checkout
+      - run: echo "INTEGRATION TEST !!!"
       
   deploy:
     docker:
@@ -24,26 +28,51 @@ jobs:
           command: |
             MBT_VERSION=$(cat ./VERSION)
             echo $MBT_VERSION
-#      - run: 
-#          name: release new version
-#          command: curl -sL https://git.io/goreleaser | bash
-#      - run: 
-#          name: publish to npm
-#          command: npm publish
-  
+
 workflows:
   version: 2
-  build_and_deploy:
+  
+  on_pr_build:
+    jobs:
+      - build:
+          filters:
+            branches:
+              ignore: master
+              
+  on_merge_build_test:
+    jobs:
+      - build:
+          filters:
+            branches:
+              only: master
+      - test:
+          requires:
+            - build
+          filters:
+            branches:
+              only: master
+              
+  on_tag_build_test_deploy:
     jobs:
       - build:
           filters:  # required since `deploy` has tag filters AND requires `build`
             tags:
-              only: /.*/
-      - deploy:
+              only: /^v*/
+            branches:
+              ignore: /.*/
+      - test:
           requires:
             - build
+          filters:  # required since `deploy` has tag filters AND requires `build`
+            tags:
+              only: /^v*/
+            branches:
+              ignore: /.*/
+      - deploy:
+          requires:
+            - test
           filters:
             tags:
-              only: /^v[\d]+(\.[\d]+)(\.[\d]*)/
+              only: /^v*/
             branches:
               ignore: /.*/
