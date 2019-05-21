@@ -56,32 +56,22 @@ workflows:
       - build:
           filters:  # required since `deploy` has tag filters AND requires `build`
             tags:
-              only: /^v*/
+              only: /.*/
             branches:
-              only: /.^v*/
-#            branches:
-#              only: /^v[0-9]+(\.[0-9])+(\.[0-9])/
-#            branches:
-#              ignore: /.*/
+              ignore: /.*/
       - test:
           requires:
             - build
           filters:  # required since `deploy` has tag filters AND requires `test`
             tags:
-              only: /^v*/
+              only: /.*/
             branches:
-              only: /.^v*/
-#            branches:
-#              only: /^v*/
-#            branches:
-#              ignore: /.*/
+              ignore: /.*/
       - deploy:
           requires:
             - test
           filters:
             tags:
-              only: /^v*/
-#            branches:
-#              only: /^v[0-9]+(\.[0-9])+(\.[0-9])/
+              only: /.*/
             branches:
-              only: /.^v*/
+              only: /.^v[0-9]+(\.[0-9])+(\.[0-9])/
