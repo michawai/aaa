@@ -26,11 +26,7 @@ jobs:
           fingerprints:
             - "6c:7e:c8:28:cd:0b:94:b6:c8:f1:3f:71:40:a1:6e:fd"
       - checkout
-      - run:
-          name: bump new version
-          command: |
-            MBT_VERSION=$(cat ./VERSION)
-            echo $MBT_VERSION
+     - run: echo "DEPLOY !!!"
 
 workflows:
   version: 2
@@ -59,23 +55,23 @@ workflows:
     jobs:
       - build:
           filters:  # required since `deploy` has tag filters AND requires `build`
-            tags:
-              only: /.*/
+  #          tags:
+  #            only: /.*/
             branches:
-              ignore: /.*/
+              only: /^v[0-9]+(\.[0-9])+(\.[0-9])/
       - test:
           requires:
             - build
           filters:  # required since `deploy` has tag filters AND requires `test`
-            tags:
-              only: /.*/
+ #           tags:
+ #             only: /.*/
             branches:
-              ignore: /.*/
+              only: /^v[0-9]+(\.[0-9])+(\.[0-9])/
       - deploy:
           requires:
             - test
           filters:
-            tags:
-              only: /.*/
+#            tags:
+#              only: /.*/
             branches:
-              only: /.^v[0-9]+(\.[0-9])+(\.[0-9])/
+              only: /^v[0-9]+(\.[0-9])+(\.[0-9])/
