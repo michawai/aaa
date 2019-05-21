@@ -10,6 +10,9 @@ jobs:
     steps:
       - checkout
   test:
+    docker:
+      - image: circleci/golang:1.11.5
+    working_directory: ~/workdir
     steps:
       - checkout
       - run: echo "INTEGRATION TEST !!!"
