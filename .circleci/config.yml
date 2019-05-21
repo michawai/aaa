@@ -26,7 +26,7 @@ jobs:
           fingerprints:
             - "6c:7e:c8:28:cd:0b:94:b6:c8:f1:3f:71:40:a1:6e:fd"
       - checkout
-     - run: echo "DEPLOY !!!"
+      - run: echo "DEPLOY !!!"
 
 workflows:
   version: 2
