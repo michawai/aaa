@@ -60,15 +60,15 @@ workflows:
       - build:
           filters:  # required since `deploy` has tag filters AND requires `build`
             tags:
-              only: /^v*/
+              only: /.*/
             branches:
               ignore: /.*/
       - test:
           requires:
             - build
-          filters:  # required since `deploy` has tag filters AND requires `build`
+          filters:  # required since `deploy` has tag filters AND requires `test`
             tags:
-              only: /^v*/
+              only: /.*/
             branches:
               ignore: /.*/
       - deploy:
