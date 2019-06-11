@@ -29,8 +29,7 @@ jobs:
       - run:
           name: remove dummy tag
           command: |
-            git tag -d release
-            git push origin --delete release
+            git push origin --delete dummy
       - run:
           name: bump version
           command: |
@@ -88,7 +87,7 @@ workflows:
       - build:
           filters:  # required since `deploy` has tag filters AND requires `build`
             tags:
-              only: /release/
+              only: /dummy/
             branches:
               ignore: /.*/
       - test:
@@ -96,7 +95,7 @@ workflows:
             - build
           filters:  # required since `deploy` has tag filters AND requires `test`
             tags:
-              only: /release/
+              only: /dummy/
             branches:
               ignore: /.*/
       - deploy:
@@ -104,7 +103,7 @@ workflows:
             - test
           filters:
             tags:
-              only: /release/
+              only: /dummy/
             branches:
               ignore: /.*/
 
