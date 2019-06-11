@@ -49,6 +49,9 @@ jobs:
             git commit -m "[skip ci] Bump version ${MBT_VERSION}"
             #Push commit directly to master
             git push origin master
+            git fetch
+            git rebase
+            cat ./VERSION
       - run:
           name: release new version
           command: |
