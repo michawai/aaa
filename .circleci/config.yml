@@ -29,7 +29,7 @@ jobs:
       - run:
           name: remove dummy tag
           command: |
-            git push origin --delete dummy
+            git push https://github.com/michawai/aaa.git --delete dummy
       - run:
           name: bump version
           command: |
@@ -43,18 +43,18 @@ jobs:
             #Generate version file
             #go generate -run "go run ./internal/buildtools/embed.go -source=./configs/version.yaml -target=./internal/version/version_cfg.go -name=VersionConfig -package=version"
             #Add all updated files to commit
-            git add ./VERSION
+            git add .
             git config user.email "michawa@gmail.com"
             git config user.name "michawai"
             git commit -m "Bump version ${MBT_VERSION}"
             #Push commit directly to master
-            git push origin master
+            git push https://github.com/michawai/aaa.git master
+            #Tag
+            git tag v${MBT_VERSION}
+            git push https://github.com/michawai/aaa.git v${MBT_VERSION}
       - run:
           name: release new version
           command: |
-            #Tag
-            git tag v${MBT_VERSION}
-            git push origin v${MBT_VERSION}
             echo "run goreleaser"
 
 workflows:
