@@ -46,12 +46,9 @@ jobs:
             git add ./VERSION
             git config user.email "michawa@gmail.com"
             git config user.name "michawai"
-            git commit -m "[skip ci] Bump version ${MBT_VERSION}"
+            git commit -m "Bump version ${MBT_VERSION}"
             #Push commit directly to master
             git push origin master
-            git fetch
-            git rebase
-            cat ./VERSION
       - run:
           name: release new version
           command: |
