@@ -43,7 +43,7 @@ jobs:
             #Generate version file
             #go generate -run "go run ./internal/buildtools/embed.go -source=./configs/version.yaml -target=./internal/version/version_cfg.go -name=VersionConfig -package=version"
             #Add all updated files to commit
-            git add .
+            git add ./VERSION
             git config user.email "michawa@gmail.com"
             git config user.name "michawai"
             git commit -m "Bump version ${MBT_VERSION}"
