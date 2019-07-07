@@ -48,10 +48,10 @@ jobs:
             git config user.name "michawai"
             git commit -m "Bump version ${MBT_VERSION}"
             #Push commit directly to master
-            git push -u https://github.com/michawai/aaa.git master
+            git push -u origin master
             #Tag
             git tag v${MBT_VERSION}
-            git push -u https://github.com/michawai/aaa.git v${MBT_VERSION}
+            git push -u origin v${MBT_VERSION}
       - run:
           name: release new version
           command: |
