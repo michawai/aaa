@@ -44,8 +44,8 @@ jobs:
             #go generate -run "go run ./internal/buildtools/embed.go -source=./configs/version.yaml -target=./internal/version/version_cfg.go -name=VersionConfig -package=version"
             #Add all updated files to commit
             git add ./VERSION
-            git config user.email "michawa@gmail.com"
-            git config user.name "michawai"
+            git config --global user.email "michawa@gmail.com"
+            git config --global user.name "michawai"
             git commit -m "Bump version ${MBT_VERSION}"
             #Push commit directly to master
             git push -u origin master
