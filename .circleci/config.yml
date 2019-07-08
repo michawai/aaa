@@ -49,7 +49,7 @@ jobs:
             git status
             git config --global user.email "michawa@gmail.com"
             git config --global user.name "michawai"
-            git commit -m "Bump version ${MBT_VERSION}"
+            git commit -m "[skip ci] Bump version ${MBT_VERSION}"
             git status
             #Push commit directly to master
             git push -u origin master
