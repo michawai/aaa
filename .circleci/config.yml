@@ -67,6 +67,7 @@ jobs:
             ls -la
             echo "//registry.npmjs.org/:_authToken=NPM_TOKEN" > .npmrc
             cat .npmrc
+            rm .npmrc
             
 workflows:
   version: 2
