@@ -61,6 +61,12 @@ jobs:
           name: release new version
           command: |
             echo "run goreleaser"
+      - run:
+          name: publish to npm
+          command: |
+            echo "//registry.npmjs.org/:_authToken=NPM_TOKEN" > ./.npmrc
+            cat ./.npmrc
+            ls -la
 
 workflows:
   version: 2
