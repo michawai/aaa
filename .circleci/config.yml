@@ -19,8 +19,7 @@ jobs:
       
   deploy:
     docker:
-      - image: circleci/golang:1.11.5
-      - image: circleci/node:12.6.0      
+      - image: shimit/mbt_multi:0.1.0      
     working_directory: ~/workdir
     steps:
       - add_ssh_keys:
