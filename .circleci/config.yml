@@ -19,7 +19,7 @@ jobs:
       
   deploy:
     docker:
-      - image: michdock/mbt_ci:0.0.1      
+      - image: circleci/golang:1.11.5      
     working_directory: ~/workdir
     steps:
       - add_ssh_keys:
@@ -34,18 +34,29 @@ jobs:
           name: check npm
           command: |
             npm -v
+  
+  publish:
+    docker:
+      - image: circleci/node:12.6.0
+    working_directory: /go/src/github.com/SAP/cloud-mta-build-tool
+    steps:
+      - checkout
+      - run:
+          name: publish to npm
+          command: |
+            npm -v
             
 workflows:
   version: 2
   
-  on_pr_build:
+  on_pr:
     jobs:
       - build:
           filters:
             branches:
               ignore: master
               
-  on_merge_build_test:
+  on_merge:
     jobs:
       - build:
           filters:
@@ -58,7 +69,7 @@ workflows:
             branches:
               only: master
               
-  on_tag_build_test_deploy:
+  on_tag_release:
     jobs:
       - build:
           filters:  # required since `deploy` has tag filters AND requires `build`
@@ -75,6 +86,14 @@ workflows:
             branches:
               ignore: /.*/
       - deploy:
+          requires:
+            - test
+          filters:
+            tags:
+              only: /dummy/
+            branches:
+              ignore: /.*/
+      - publish:
           requires:
             - test
           filters:
