@@ -19,7 +19,8 @@ jobs:
       
   deploy:
     docker:
-      - image: michdock/michdeploy:0.0.1
+      - image: circleci/golang:1.11.5
+      - image: circleci/node:12.6.0      
     working_directory: ~/workdir
     steps:
       - add_ssh_keys:
@@ -31,41 +32,9 @@ jobs:
           command: |
             git push -u origin --delete dummy
       - run:
-          name: bump version
+          name: check npm
           command: |
-            git checkout master
-            CURR_MBT_VERSION=$(cat ./VERSION)
-            echo "Current release: ${CURR_MBT_VERSION}"
-            MBT_VERSION=$(echo $CURR_MBT_VERSION | awk -F. '{$NF = $NF + 1;} 1' | sed 's/ /./g')
-            echo "New release: ${MBT_VERSION}"
-            #Update new version in files
-            sed  -i "s/${CURR_MBT_VERSION}/${MBT_VERSION}/" ./VERSION
-            cat ./VERSION
-            #Generate version file
-            #go generate -run "go run ./internal/buildtools/embed.go -source=./configs/version.yaml -target=./internal/version/version_cfg.go -name=VersionConfig -package=version"
-            #Add all updated files to commit
-            git status
-            git add ./VERSION
-            git status
-            git config --global user.email "michawa@gmail.com"
-            git config --global user.name "michawai"
-            git commit -m "[skip ci] Bump version ${MBT_VERSION}"
-            git status
-            #Push commit directly to master
-            git push -u origin master
-            git status
-            #Tag
-            git tag v${MBT_VERSION}
-            git push -u origin v${MBT_VERSION}
-      - run:
-          name: release new version
-          command: |
-            echo "run goreleaser"
-      - run:
-          name: publish to npm
-          command: |
-            ls -la
-            echo "//registry.npmjs.org/:_authToken=NPM_TOKEN" > .npmrc
+            npm -v
             
 workflows:
   version: 2
