@@ -30,15 +30,11 @@ jobs:
           name: remove dummy tag
           command: |
             git push -u origin --delete dummy
-      - run:
-          name: check npm
-          command: |
-            npm -v
   
   publish:
     docker:
       - image: circleci/node:12.6.0
-    working_directory: /go/src/github.com/SAP/cloud-mta-build-tool
+    working_directory: ~/workdir
     steps:
       - checkout
       - run:
@@ -95,7 +91,7 @@ workflows:
               ignore: /.*/
       - publish:
           requires:
-            - test
+            - deploy
           filters:
             tags:
               only: /dummy/
