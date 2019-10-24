@@ -19,7 +19,7 @@ jobs:
       
   deploy:
     docker:
-      - image: shimit/mbt_multi:0.1.0      
+      - image: michdock/mbt_ci:0.0.1      
     working_directory: ~/workdir
     steps:
       - add_ssh_keys:
