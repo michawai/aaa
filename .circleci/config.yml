@@ -30,6 +30,15 @@ jobs:
           name: remove dummy tag
           command: |
             git push -u origin --delete dummy
+            #Tag
+            #Make sure HEAD points to master
+            git checkout master
+            CURR_MBT_VERSION=$(cat ./VERSION)
+            echo "Current release: ${CURR_MBT_VERSION}"
+            MBT_VERSION=$(echo $CURR_MBT_VERSION | awk -F. '{$NF = $NF + 1;} 1' | sed 's/ /./g')
+            echo "New release: ${MBT_VERSION}"
+            git tag -a v${MBT_VERSION} -m "New release ${MBT_VERSION}"
+            git push https://github.com/michawai/aaa.git v${MBT_VERSION}
   
   publish:
     docker:
