@@ -49,7 +49,7 @@ jobs:
   
   publish:
     docker:
-      - image: circleci/node:12.6.0-alpine
+      - image: circleci/node:13.1.0
     working_directory: ~/workdir
     steps:
       - checkout
