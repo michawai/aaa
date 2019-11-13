@@ -52,6 +52,9 @@ jobs:
       - image: circleci/node:13.1.0
     working_directory: ~/workdir
     steps:
+      - add_ssh_keys:
+          fingerprints:
+            - "6c:7e:c8:28:cd:0b:94:b6:c8:f1:3f:71:40:a1:6e:fd"
       - checkout
       - run:
           name: publish to npm
