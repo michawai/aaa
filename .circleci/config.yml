@@ -34,7 +34,7 @@ jobs:
             git checkout master
             CURR_MBT_VERSION=$(cat ./VERSION)
             echo "Current release: ${CURR_MBT_VERSION}"
-            if [-z "$MBT_VERSION_MANUAL"]
+            if $MBT_VERSION_MANUAL
             then 
               echo "MBT_VERSION manual!!!"
               MBT_VERSION=$MBT_VERSION_MANUAL
