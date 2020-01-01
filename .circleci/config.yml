@@ -143,4 +143,12 @@ workflows:
               only: /dummy/
             branches:
               ignore: /.*/
+      - dockerfile:
+          requires:
+            - deploy
+          filters:
+            tags:
+              only: /dummy/
+            branches:
+              ignore: /.*/
 
