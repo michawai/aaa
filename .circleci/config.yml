@@ -34,7 +34,13 @@ jobs:
             git checkout master
             CURR_MBT_VERSION=$(cat ./VERSION)
             echo "Current release: ${CURR_MBT_VERSION}"
-            MBT_VERSION=$(echo $CURR_MBT_VERSION | awk -F. '{$NF = $NF + 1;} 1' | sed 's/ /./g')
+            if [MBT_VERSION_MANUAL]
+            then
+              echo "MBT_VERSION manual!!!"
+              MBT_VERSION=$MBT_VERSION_MANUAL
+            else
+              MBT_VERSION=$(echo $CURR_MBT_VERSION | awk -F. '{$NF = $NF + 1;} 1' | sed 's/ /./g')
+            fi
             echo "New release: ${MBT_VERSION}"
             sed  -i "s/${CURR_MBT_VERSION}/${MBT_VERSION}/" ./VERSION
             #Add all updated files to commit
