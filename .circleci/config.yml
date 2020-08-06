@@ -27,7 +27,7 @@ jobs:
           name: compliance check
           command: |
             pip3 install --user reuse
-            reuse lint
+            ~/.local/bin/reuse lint
             
   deploy:
     docker:
