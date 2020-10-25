@@ -109,7 +109,6 @@ jobs:
             git checkout docker
             echo "Image release: ${MBT_VERSION}"
             docker build -t michci:${MBT_VERSION} .
-#            docker-compose -f ./docker-compose.test.yml up
             docker login docker.pkg.github.com -u michawai -p $MICHAWAI_GITHUB_TOKEN
             docker tag michci:${MBT_VERSION} docker.pkg.github.com/michawai/aaa/michci:${MBT_VERSION}
             docker push docker.pkg.github.com/michawai/aaa/michci:${MBT_VERSION}
