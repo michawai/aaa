@@ -118,7 +118,7 @@ jobs:
       - run:
           name: push docker image
           command: |
-            echo "$MICHAWAI_GITHUB_TOKEN" | docker login docker.pkg.github.com -u michawai --password-stdin
+            docker login docker.pkg.github.com -u michawai -p $MICHAWAI_GITHUB_TOKEN
             docker tag michci docker.pkg.github.com/michawai/aaa/michci:$MBT_VERSION
             docker push docker.pkg.github.com/michawai/aaa/michci:$MBT_VERSION
 
