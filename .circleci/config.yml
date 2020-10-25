@@ -125,6 +125,12 @@ jobs:
 workflows:
   version: 2
   
+  on_merge_docker:
+    jobs:
+      - image:
+          filters:
+            branches:
+              only: docker
   on_pr:
     jobs:
       - build:
@@ -191,9 +197,3 @@ workflows:
               only: /dummy/
             branches:
               ignore: /.*/
-  on_merge_docker:
-    jobs:
-      - image:
-          filters:
-            branches:
-              only: docker
