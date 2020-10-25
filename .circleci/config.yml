@@ -17,17 +17,17 @@ jobs:
       - checkout
       - run: echo "INTEGRATION TEST !!!"
   
-  compliance:
-    docker:
-      - image: circleci/python:3.6.4
-    working_directory: ~/workdir
-    steps:
-      - checkout
-      - run:
-          name: compliance check
-          command: |
-            pip3 install --user reuse
-            ~/.local/bin/reuse lint
+#  compliance:
+#    docker:
+#      - image: circleci/python:3.6.4
+#    working_directory: ~/workdir
+#    steps:
+#      - checkout
+#      - run:
+#          name: compliance check
+#          command: |
+#            pip3 install --user reuse
+#            ~/.local/bin/reuse lint
             
   release:
     docker:
@@ -153,12 +153,12 @@ workflows:
               
   on_tag_release:
     jobs:
-      - compliance:
-          filters:  # required since `deploy` has tag filters AND requires `build`
-            tags:
-              only: /dummy/
-            branches:
-              ignore: /.*/
+#      - compliance:
+#          filters:  # required since `deploy` has tag filters AND requires `build`
+#            tags:
+#              only: /dummy/
+#            branches:
+#              ignore: /.*/
       - build:
           filters:  # required since `deploy` has tag filters AND requires `build`
             tags:
