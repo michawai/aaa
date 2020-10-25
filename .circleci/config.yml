@@ -63,15 +63,15 @@ jobs:
             git push -q https://github.com/michawai/aaa.git master
             git tag -a v${MBT_VERSION} -m "New release ${MBT_VERSION}"
             git push https://github.com/michawai/aaa.git v${MBT_VERSION}
-            git checkout master
+            git checkout docker
             sed  -i "/ARG MBT_VERSION=/ s/${CURR_MBT_VERSION}/${MBT_VERSION}/" ./Dockerfile
             #Add all updated files to commit
             git add ./Dockerfile
             git config user.email "michawa@gmail.com"
             git config user.name "michawai"
             git commit -m "[skip ci] Bump version ${MBT_VERSION}"
-            #Push commit directly to master
-            git push -q https://github.com/michawai/aaa.git master
+            #Push commit directly to docker
+            git push -q https://github.com/michawai/aaa.git docker
   
   publish:
     docker:
