@@ -71,7 +71,7 @@ jobs:
             git config user.name "michawai"
             git commit -m "[skip ci] Bump version ${MBT_VERSION}"
             #Push commit directly to docker
-            git push -q https://github.com/michawai/aaa.git docker
+            git push https://github.com/michawai/aaa.git docker
   
   publish:
     docker:
