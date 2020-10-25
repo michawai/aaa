@@ -119,7 +119,7 @@ jobs:
           name: push docker image
           command: |
             docker login docker.pkg.github.com -u michawai -p $MICHAWAI_GITHUB_TOKEN
-            docker tag michci docker.pkg.github.com/michawai/aaa/michci:$MBT_VERSION
+            docker tag michci:$MBT_VERSION docker.pkg.github.com/michawai/aaa/michci:$MBT_VERSION
             docker push docker.pkg.github.com/michawai/aaa/michci:$MBT_VERSION
 
 workflows:
