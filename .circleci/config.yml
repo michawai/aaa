@@ -3,26 +3,56 @@ version: 2.1
 jobs:
   build:
     docker:
-      - image: circleci/golang:1.11.5
+      - image: circleci/golang:1.13.6
+
     environment:
-      - DEP_VERSION: 0.5.0
     working_directory: ~/workdir
     steps:
       - checkout
+      - run: echo "*** BUILD ***"
+#      - run: go version
+#      - run: go env
+#      - run:
+#          name: install dependencies
+#          command: |
+#            go mod vendor
+#      - run: go test -v ./...
+#      - run: sudo chown circleci:circleci /go/bin
+#      - run: make tools
+#      - run: make lint
+#      - run:
+#          name: cov install coverge deps
+#          command: |
+#            go get golang.org/x/tools/cmd/cover
+#            go get github.com/mattn/goveralls
+#            go get github.com/modocache/gover
+#            go install github.com/mattn/goveralls
+#            go install github.com/modocache/gover
+#      - run: go test -v ./... -coverprofile=mta.coverprofile
+#      - run: gover
+#      - run: goveralls -v -service=circle-ci -coverprofile=gover.coverprofile -repotoken $COVERALLS_TOKEN
+
   test:
     docker:
-      - image: circleci/golang:1.13.3
+      - image: shimit/mbt_multi:0.3.0
     working_directory: ~/workdir
     steps:
       - checkout
-      - run: echo "INTEGRATION TEST !!!"
-  
-#  compliance:
-#    docker:
-#      - image: circleci/python:3.6.4
-#    working_directory: ~/workdir
-#    steps:
-#      - checkout
+      - run: echo "*** TEST ***"
+#      - run:
+#          name: install dependencies
+#          command: |
+#            go mod vendor
+#      - run: cf login -a $CF_API -o $ORG -s $SPACE -u $TECH_USER -p $TECH_PASS
+#      - run: cd integration &&  go test -tags=integration
+
+  compliance:
+    docker:
+      - image: circleci/python:3.6.4
+    working_directory: ~/workdir
+    steps:
+      - checkout
+      - run: echo "*** COMPLIANCE ***"
 #      - run:
 #          name: compliance check
 #          command: |
@@ -31,17 +61,20 @@ jobs:
             
   release:
     docker:
-      - image: circleci/golang:1.13.3  
+      - image: circleci/golang:1.13.3
     working_directory: ~/workdir
     steps:
       - add_ssh_keys:
           fingerprints:
             - "6c:7e:c8:28:cd:0b:94:b6:c8:f1:3f:71:40:a1:6e:fd"
       - checkout
+#      - run:
+#          name: install dependencies
+#          command: |
+#            go mod vendor
       - run:
-          name: new release
+          name: bump version
           command: |
-            #Tag
             #Make sure HEAD points to master
             git checkout master
             CURR_MBT_VERSION=$(cat ./VERSION)
@@ -52,27 +85,44 @@ jobs:
             else
               MBT_VERSION=$(echo $CURR_MBT_VERSION | awk -F. '{$NF = $NF + 1;} 1' | sed 's/ /./g')
             fi
+            MBT_VERSION=$(echo $CURR_MBT_VERSION | awk -F. '{$NF = $NF + 1;} 1' | sed 's/ /./g')
             echo "New release: ${MBT_VERSION}"
+            #Update new version in files
+#            sed  -i "/\"version\":/s/${CURR_MBT_VERSION}/${MBT_VERSION}/" ./package.json
+#            sed  -i "/cli_version:/s/${CURR_MBT_VERSION}/${MBT_VERSION}/" ./configs/version.yaml
             sed  -i "s/${CURR_MBT_VERSION}/${MBT_VERSION}/" ./VERSION
+            #Generate version file
+#            go generate -run "go run ./internal/buildtools/embed.go ./internal/buildtools/buildtools_msg.go -source=./configs/version.yaml -target=./internal/version/version_cfg.go -name=VersionConfig -package=version"
             #Add all updated files to commit
+#            git add ./package.json ./configs/version.yaml ./VERSION ./internal/version/version_cfg.go
             git add ./VERSION
-            git config user.email "michawa@gmail.com"
-            git config user.name "michawai"
+            git config user.email "${MICHAWAI_REPO_USER_EMAIL}"
+            git config user.name "${MICHAWAI_USER}"
             git commit -m "[skip ci] Bump version ${MBT_VERSION}"
             #Push commit directly to master
             git push -q https://github.com/michawai/aaa.git master
+            #Tag
             git tag -a v${MBT_VERSION} -m "New release ${MBT_VERSION}"
             git push https://github.com/michawai/aaa.git v${MBT_VERSION}
+            #Update new version in docker branch
             git checkout docker
             sed  -i "/ARG MBT_VERSION=/ s/${CURR_MBT_VERSION}/${MBT_VERSION}/" ./Dockerfile
-            #Add all updated files to commit
-            git add ./Dockerfile
-            git config user.email "michawa@gmail.com"
-            git config user.name "michawai"
+#            sed  -i "/- Cloud MTA Build Tool -/s/${CURR_MBT_VERSION}/${MBT_VERSION}/" ./README.md
+#            sed  -i "s/- ${CURR_MBT_VERSION}/- ${MBT_VERSION}/" ./test/goss/goss.yaml
+            git add ./Dockerfile ./README.md ./test/goss/goss.yaml
+            git config user.email "${MICHAWAI_REPO_USER_EMAIL}"
+            git config user.name "${MICHAWAI_USER}"
             git commit -m "[skip ci] Bump version ${MBT_VERSION}"
-            #Push commit directly to docker
-            git push https://github.com/michawai/aaa.git docker
-  
+            #Push commit directly to docker branch
+            git push -q https://github.com/michawai/aaa.git docker
+      - run:
+          name: release new version
+          command: |
+            #Make sure HEAD points to master
+            git checkout master
+#            export GITHUB_TOKEN=${CLOUD_MTA_BOT_GITHUB_TOKEN}
+#            curl -sL https://git.io/goreleaser | bash
+            
   publish:
     docker:
       - image: circleci/node:13.1.0
@@ -80,18 +130,27 @@ jobs:
     steps:
       - add_ssh_keys:
           fingerprints:
-            - "6c:7e:c8:28:cd:0b:94:b6:c8:f1:3f:71:40:a1:6e:fd"
+            - "c3:2b:e9:bb:d5:05:32:ab:df:ce:2b:c3:e5:f7:95:42"
       - checkout
       - run:
           name: publish to npm
           command: |
-            npm -v
-            git push -u origin --delete dummy
-
+            #Make sure HEAD points to master
+            git checkout master
+            git fetch
+            git rebase
+#            echo "//registry.npmjs.org/:_authToken=$CLOUD_MTA_BOT_NPM_TOKEN" > .npmrc
+#            npm install
+#            npm publish
+      - run:
+          name: remove dummy release tag
+          command: |
+            git push https://github.com/michawai/aaa.git --delete release
+            
   image:
     docker:
       - image: docker:17.05.0-ce-git
-    working_directory: ~/go/src/github.com/SAP/cloud-mta-build-tool
+    working_directory: ~/workdir
     steps:
       - checkout
       - setup_remote_docker
@@ -103,35 +162,79 @@ jobs:
             pip install \
               docker-compose==1.12.0
       - run:
-          name: new image
+          name: release image
           command: |
             MBT_VERSION=$(cat ./VERSION)
-            git checkout docker
             echo "Image release: ${MBT_VERSION}"
+            git checkout docker
+			
+      			echo "Release michci:latest"
+            docker build -t michci:latest .
+            docker-compose -f ./docker-compose.test.yml up
+            docker login docker.pkg.github.com -u michawai -p ${MICHAWAI_GITHUB_TOKEN}
+            docker tag michci:latest docker.pkg.github.com/michawai/aaa/michci:latest
+            docker push docker.pkg.github.com/michawai/aaa/michci:latest
+
+			      echo "Release michci:${MBT_VERSION}"
             docker build -t michci:${MBT_VERSION} .
-            docker login docker.pkg.github.com -u michawai -p $MICHAWAI_GITHUB_TOKEN
-            docker tag michci:${MBT_VERSION} docker.pkg.github.com/michawai/aaa/michci:${MBT_VERSION}
-            docker push docker.pkg.github.com/michawai/aaa/michci:${MBT_VERSION}
+            docker-compose -f ./docker-compose.test.yml up
+            docker login docker.pkg.github.com -u michawai -p ${MICHAWAI_GITHUB_TOKEN}
+            docker tag michci:${MBT_VERSION} docker.pkg.github.com/michawai/aaa/michci:$MBT_VERSION
+            docker push docker.pkg.github.com/michawai/aaa/michci:$MBT_VERSION
+			
+			      echo "Release michci-alpine:latest"
+            docker build -t michci-alpine:latest .
+            docker-compose -f ./docker-compose.test.yml up
+            docker login docker.pkg.github.com -u michawai -p ${MICHAWAI_GITHUB_TOKEN}
+            docker tag michci-alpine:latest docker.pkg.github.com/michawai/aaa/michci-alpine:latest
+            docker push docker.pkg.github.com/michawai/aaa/michci-alpine:latest
+			
+			      echo "Release michci-alpine:${MBT_VERSION}"
+            docker build -t michci-alpine:${MBT_VERSION} .
+            docker-compose -f ./docker-compose.test.yml up
+            docker login docker.pkg.github.com -u michawai -p ${MICHAWAI_GITHUB_TOKEN}
+            docker tag michci-alpine:${MBT_VERSION} docker.pkg.github.com/michawai/aaa/michci-alpine:$MBT_VERSION
+            docker push docker.pkg.github.com/michawai/aaa/michci-alpine:$MBT_VERSION
+
+  ghpages:
+    docker:
+      - image: squidfunk/mkdocs-material:4.3.1
+    working_directory: ~/workdir
+    steps:
+      - checkout
+      - run: echo "*** DOCS ***"
+#      - run:
+#          name: release to GitHub Pages
+#          command: |
+#            cd docs
+#            mkdocs gh-deploy --config-file ../docs/mkdocs.yml --remote-branch gh-pages
 
 workflows:
   version: 2
-  
-  on_pr_docker:
-    jobs:
-      - image:
-          filters:
-            branches:
-              only: docker
-  on_pr:
+  on_pr_build:
     jobs:
       - build:
           filters:
             branches:
-              ignore: master, docker
-              
-  on_merge:
+              ignore: master
+      - compliance:
+          filters:
+            branches:
+              ignore: master
+      - test:
+          requires:
+            - build
+          filters:
+            branches:
+              ignore: master
+
+  on_merge_build_test:
     jobs:
       - build:
+          filters:
+            branches:
+              only: master
+      - compliance:
           filters:
             branches:
               only: master
@@ -141,43 +244,45 @@ workflows:
           filters:
             branches:
               only: master
-              
-  on_tag_release:
+
+  on_tag_build_test_deploy:
     jobs:
-#      - compliance:
-#          filters:  # required since `deploy` has tag filters AND requires `build`
-#            tags:
-#              only: /dummy/
-#            branches:
-#              ignore: /.*/
       - build:
-          filters:  # required since `deploy` has tag filters AND requires `build`
+          filters:  # required since `release` has tag filters AND requires `build`
             tags:
-              only: /dummy/
+              only: /release/
             branches:
               ignore: /.*/
       - test:
           requires:
             - build
-          filters:  # required since `deploy` has tag filters AND requires `test`
+          filters:  # required since `release` has tag filters AND requires `test`
             tags:
-              only: /dummy/
+              only: /release/
             branches:
               ignore: /.*/
       - release:
           requires:
             - test
-          filters:
+          filters:  # job runs on tag 'release' for no branches
             tags:
-              only: /dummy/
+              only: /release/
+            branches:
+              ignore: /.*/
+      - ghpages:
+          requires:
+            - test
+          filters:  # job runs on tag 'release' for no branches
+            tags:
+              only: /release/
             branches:
               ignore: /.*/
       - publish:
           requires:
             - release
-          filters:
+          filters:  # job runs on tag 'release' for no branches
             tags:
-              only: /dummy/
+              only: /release/
             branches:
               ignore: /.*/
       - image:
@@ -185,6 +290,6 @@ workflows:
             - release
           filters:  # job runs on tag 'release' for no branches
             tags:
-              only: /dummy/
+              only: /release/
             branches:
               ignore: /.*/
