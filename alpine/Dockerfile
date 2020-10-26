@@ -1,1 +1,3 @@
 FROM alpine:3.12.0
+
+ARG MBT_VERSION=1.0.27
