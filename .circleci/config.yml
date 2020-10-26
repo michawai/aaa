@@ -10,27 +10,6 @@ jobs:
     steps:
       - checkout
       - run: echo "*** BUILD ***"
-#      - run: go version
-#      - run: go env
-#      - run:
-#          name: install dependencies
-#          command: |
-#            go mod vendor
-#      - run: go test -v ./...
-#      - run: sudo chown circleci:circleci /go/bin
-#      - run: make tools
-#      - run: make lint
-#      - run:
-#          name: cov install coverge deps
-#          command: |
-#            go get golang.org/x/tools/cmd/cover
-#            go get github.com/mattn/goveralls
-#            go get github.com/modocache/gover
-#            go install github.com/mattn/goveralls
-#            go install github.com/modocache/gover
-#      - run: go test -v ./... -coverprofile=mta.coverprofile
-#      - run: gover
-#      - run: goveralls -v -service=circle-ci -coverprofile=gover.coverprofile -repotoken $COVERALLS_TOKEN
 
   test:
     docker:
@@ -39,12 +18,6 @@ jobs:
     steps:
       - checkout
       - run: echo "*** TEST ***"
-#      - run:
-#          name: install dependencies
-#          command: |
-#            go mod vendor
-#      - run: cf login -a $CF_API -o $ORG -s $SPACE -u $TECH_USER -p $TECH_PASS
-#      - run: cd integration &&  go test -tags=integration
 
   compliance:
     docker:
@@ -68,10 +41,6 @@ jobs:
           fingerprints:
             - "6c:7e:c8:28:cd:0b:94:b6:c8:f1:3f:71:40:a1:6e:fd"
       - checkout
-#      - run:
-#          name: install dependencies
-#          command: |
-#            go mod vendor
       - run:
           name: bump version
           command: |
@@ -88,13 +57,9 @@ jobs:
             MBT_VERSION=$(echo $CURR_MBT_VERSION | awk -F. '{$NF = $NF + 1;} 1' | sed 's/ /./g')
             echo "New release: ${MBT_VERSION}"
             #Update new version in files
-#            sed  -i "/\"version\":/s/${CURR_MBT_VERSION}/${MBT_VERSION}/" ./package.json
-#            sed  -i "/cli_version:/s/${CURR_MBT_VERSION}/${MBT_VERSION}/" ./configs/version.yaml
             sed  -i "s/${CURR_MBT_VERSION}/${MBT_VERSION}/" ./VERSION
             #Generate version file
-#            go generate -run "go run ./internal/buildtools/embed.go ./internal/buildtools/buildtools_msg.go -source=./configs/version.yaml -target=./internal/version/version_cfg.go -name=VersionConfig -package=version"
             #Add all updated files to commit
-#            git add ./package.json ./configs/version.yaml ./VERSION ./internal/version/version_cfg.go
             git add ./VERSION
             git config user.email "${MICHAWAI_REPO_USER_EMAIL}"
             git config user.name "${MICHAWAI_USER}"
@@ -107,8 +72,6 @@ jobs:
             #Update new version in docker branch
             git checkout docker
             sed  -i "/ARG MBT_VERSION=/ s/${CURR_MBT_VERSION}/${MBT_VERSION}/" ./Dockerfile
-#            sed  -i "/- Cloud MTA Build Tool -/s/${CURR_MBT_VERSION}/${MBT_VERSION}/" ./README.md
-#            sed  -i "s/- ${CURR_MBT_VERSION}/- ${MBT_VERSION}/" ./test/goss/goss.yaml
             git add ./Dockerfile ./README.md ./test/goss/goss.yaml
             git config user.email "${MICHAWAI_REPO_USER_EMAIL}"
             git config user.name "${MICHAWAI_USER}"
@@ -120,8 +83,6 @@ jobs:
           command: |
             #Make sure HEAD points to master
             git checkout master
-#            export GITHUB_TOKEN=${CLOUD_MTA_BOT_GITHUB_TOKEN}
-#            curl -sL https://git.io/goreleaser | bash
             
   publish:
     docker:
@@ -139,9 +100,6 @@ jobs:
             git checkout master
             git fetch
             git rebase
-#            echo "//registry.npmjs.org/:_authToken=$CLOUD_MTA_BOT_NPM_TOKEN" > .npmrc
-#            npm install
-#            npm publish
       - run:
           name: remove dummy release tag
           command: |
@@ -170,28 +128,24 @@ jobs:
 			
             echo "Release michci:latest"
             docker build -t michci:latest .
-            docker-compose -f ./docker-compose.test.yml up
             docker login docker.pkg.github.com -u michawai -p ${MICHAWAI_GITHUB_TOKEN}
             docker tag michci:latest docker.pkg.github.com/michawai/aaa/michci:latest
             docker push docker.pkg.github.com/michawai/aaa/michci:latest
 
             echo "Release michci:${MBT_VERSION}"
             docker build -t michci:${MBT_VERSION} .
-            docker-compose -f ./docker-compose.test.yml up
             docker login docker.pkg.github.com -u michawai -p ${MICHAWAI_GITHUB_TOKEN}
             docker tag michci:${MBT_VERSION} docker.pkg.github.com/michawai/aaa/michci:$MBT_VERSION
             docker push docker.pkg.github.com/michawai/aaa/michci:$MBT_VERSION
 			
             echo "Release michci-alpine:latest"
             docker build -t michci-alpine:latest .
-            docker-compose -f ./docker-compose.test.yml up
             docker login docker.pkg.github.com -u michawai -p ${MICHAWAI_GITHUB_TOKEN}
             docker tag michci-alpine:latest docker.pkg.github.com/michawai/aaa/michci-alpine:latest
             docker push docker.pkg.github.com/michawai/aaa/michci-alpine:latest
 			
-            echo "Release ${MBT_VERSION}"
+            echo "Release michci-alpine:${MBT_VERSION}"
             docker build -t michci-alpine:${MBT_VERSION} .
-            docker-compose -f ./docker-compose.test.yml up
             docker login docker.pkg.github.com -u michawai -p ${MICHAWAI_GITHUB_TOKEN}
             docker tag michci-alpine:${MBT_VERSION} docker.pkg.github.com/michawai/aaa/michci-alpine:$MBT_VERSION
             docker push docker.pkg.github.com/michawai/aaa/michci-alpine:$MBT_VERSION
@@ -203,11 +157,6 @@ jobs:
     steps:
       - checkout
       - run: echo "*** DOCS ***"
-#      - run:
-#          name: release to GitHub Pages
-#          command: |
-#            cd docs
-#            mkdocs gh-deploy --config-file ../docs/mkdocs.yml --remote-branch gh-pages
 
 workflows:
   version: 2
