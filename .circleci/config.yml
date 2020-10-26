@@ -86,7 +86,7 @@ jobs:
     steps:
       - add_ssh_keys:
           fingerprints:
-            - "c3:2b:e9:bb:d5:05:32:ab:df:ce:2b:c3:e5:f7:95:42"
+            - "6c:7e:c8:28:cd:0b:94:b6:c8:f1:3f:71:40:a1:6e:fd"
       - checkout
       - run:
           name: publish to npm
