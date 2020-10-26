@@ -168,28 +168,28 @@ jobs:
             echo "Image release: ${MBT_VERSION}"
             git checkout docker
 			
-      			echo "Release michci:latest"
+            echo "Release michci:latest"
             docker build -t michci:latest .
             docker-compose -f ./docker-compose.test.yml up
             docker login docker.pkg.github.com -u michawai -p ${MICHAWAI_GITHUB_TOKEN}
             docker tag michci:latest docker.pkg.github.com/michawai/aaa/michci:latest
             docker push docker.pkg.github.com/michawai/aaa/michci:latest
 
-			      echo "Release michci:${MBT_VERSION}"
+            echo "Release michci:${MBT_VERSION}"
             docker build -t michci:${MBT_VERSION} .
             docker-compose -f ./docker-compose.test.yml up
             docker login docker.pkg.github.com -u michawai -p ${MICHAWAI_GITHUB_TOKEN}
             docker tag michci:${MBT_VERSION} docker.pkg.github.com/michawai/aaa/michci:$MBT_VERSION
             docker push docker.pkg.github.com/michawai/aaa/michci:$MBT_VERSION
 			
-			      echo "Release michci-alpine:latest"
+            echo "Release michci-alpine:latest"
             docker build -t michci-alpine:latest .
             docker-compose -f ./docker-compose.test.yml up
             docker login docker.pkg.github.com -u michawai -p ${MICHAWAI_GITHUB_TOKEN}
             docker tag michci-alpine:latest docker.pkg.github.com/michawai/aaa/michci-alpine:latest
             docker push docker.pkg.github.com/michawai/aaa/michci-alpine:latest
 			
-			      echo "Release michci-alpine:${MBT_VERSION}"
+            echo "Release ${MBT_VERSION}"
             docker build -t michci-alpine:${MBT_VERSION} .
             docker-compose -f ./docker-compose.test.yml up
             docker login docker.pkg.github.com -u michawai -p ${MICHAWAI_GITHUB_TOKEN}
