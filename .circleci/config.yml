@@ -66,7 +66,8 @@ jobs:
             #Update new version in docker branch
             git checkout docker
             sed  -i "/ARG MBT_VERSION=/ s/${CURR_MBT_VERSION}/${MBT_VERSION}/" ./Dockerfile
-            git add ./Dockerfile
+            sed  -i "/ARG MBT_VERSION=/ s/${CURR_MBT_VERSION}/${MBT_VERSION}/" ./alpine/Dockerfile
+            git add ./Dockerfile ./alpine/Dockerfile
             git config user.email "${MICHAWAI_REPO_USER_EMAIL}"
             git config user.name "${MICHAWAI_USER}"
             git commit -m "[skip ci] Bump version ${MBT_VERSION}"
