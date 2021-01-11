@@ -48,7 +48,12 @@ jobs:
             git checkout master
             CURR_MBT_VERSION=$(cat ./VERSION)
             echo "Current release: ${CURR_MBT_VERSION}"
-            MBT_VERSION=$(echo $CURR_MBT_VERSION | awk -F. '{$NF = $NF + 1;} 1' | sed 's/ /./g')
+            if [[-z "$MBT_VERSION_MANUAL"]]; then 
+              MBT_VERSION=$(echo $CURR_MBT_VERSION | awk -F. '{$NF = $NF + 1;} 1' | sed 's/ /./g')
+            else
+              echo "Using manual MBT version ${MBT_VERSION_MANUAL}"
+              MBT_VERSION=$MBT_VERSION_MANUAL
+            fi
             echo "New release: ${MBT_VERSION}"
             #Update new version in files
             sed  -i "s/${CURR_MBT_VERSION}/${MBT_VERSION}/" ./VERSION
