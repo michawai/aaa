@@ -48,7 +48,7 @@ jobs:
             git checkout master
             CURR_MBT_VERSION=$(cat ./VERSION)
             echo "Current release: ${CURR_MBT_VERSION}"
-            MBT_VERSION=$(echo $CURR_MBT_VERSION |awk -F. '{if ("$PATCH" == "true"){$3++} else if ("$MINOR" == "true"){$2++;$3=0} else if ("$MAJOR" == "true"){$1++;$2=0;$3=0} else {$1=0;$2=0;$3=0;} printf "%d.%d.%d\n", $1, $2 ,$3 })
+            MBT_VERSION=$(echo $CURR_MBT_VERSION |awk -F. '{if ("$PATCH" == "true"){$3++} else if ("$MINOR" == "true"){$2++;$3=0} else if ("$MAJOR" == "true"){$1++;$2=0;$3=0} else {$1=0;$2=0;$3=0;} printf "%d.%d.%d\n", $1, $2 ,$3 }')
             echo "New release: ${MBT_VERSION}"
             #Update new version in files
             sed  -i "s/${CURR_MBT_VERSION}/${MBT_VERSION}/" ./VERSION
