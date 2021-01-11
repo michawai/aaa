@@ -1,3 +1,3 @@
 FROM openjdk:11-jdk-slim
 
-ARG MBT_VERSION=0.0.0
+ARG MBT_VERSION=1.0.0
