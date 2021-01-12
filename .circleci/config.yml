@@ -50,18 +50,18 @@ jobs:
             echo "Current release: ${CURR_MBT_VERSION}"
             echo "MAJOR: $MAJOR, MINOR: $MINOR, PATCH: $PATCH"
             MBT_VERSION=$(echo $CURR_MBT_VERSION |awk -F. -v MAJOR_VAR="$MAJOR" -v MINOR_VAR="$MINOR" -v PATCH_VAR="$PATCH" '{
-                                                    if (MAJOR_VAR == "true"){
-                                                      $1++;
-                                                      $2=0;
-                                                      $3=0
-                                                    } else if (MINOR_VAR == "true"){
-                                                      $2++;
-                                                      $3=0;
-                                                    } else {
-                                                      $3++
-                                                    } 
-                                                    printf "%d.%d.%d\n", $1, $2 ,$3 
-                                                  }')
+              if (MAJOR_VAR == "true"){
+                $1++
+                $2=0
+                $3=0
+              } else if (MINOR_VAR == "true"){
+                $2++
+                $3=0
+              } else if (PATCH_VAR == "true"){
+                $3++
+              } 
+              printf "%d.%d.%d\n", $1, $2 ,$3 
+            }')
             echo "New release: ${MBT_VERSION}"
             #Update new version in files
             sed  -i "s/${CURR_MBT_VERSION}/${MBT_VERSION}/" ./VERSION
@@ -70,7 +70,7 @@ jobs:
             git add ./VERSION
             git config user.email "${MICHAWAI_REPO_USER_EMAIL}"
             git config user.name "${MICHAWAI_USER}"
-            git commit -m "[skip ci] Bump version ${MBT_VERSION}"
+            git commit --allow-empty -m "[skip ci] Bump version ${MBT_VERSION}"
             #Push commit directly to master
             git push -q https://github.com/michawai/aaa.git master
             #Tag
