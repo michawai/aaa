@@ -14,8 +14,9 @@ jobs:
           command: |
             echo "*** BUILD ***"
             sed  -i "s/Hi/Bye/" ./README.txt
-            $(git diff --exit-code | if [ echo $? == 1 ] then {echo "*** git add go.sum ***"} fi)
-            
+            git status
+            $(git diff --exit-code | awk -v NR_VAR="$NR" '{if ($NR_VAR > 0) $(git add README.txt)}' )
+            git status
             
   test:
     docker:
