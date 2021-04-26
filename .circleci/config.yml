@@ -15,7 +15,7 @@ jobs:
             echo "*** BUILD ***"
             sed  -i "s/Hi/Bye/" ./README.txt
             git status
-            git add ./README ./VERSION
+            git add ./README.txt ./VERSION
             git status
             
   test:
