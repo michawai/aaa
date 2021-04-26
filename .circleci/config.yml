@@ -14,10 +14,9 @@ jobs:
           command: |
             echo "*** BUILD ***"
             sed  -i "s/Hi/Bye/" ./README.txt
-            git diff --exit-code
-            if (echo $? == 1) {
-              echo "*** git add go.sum ***"
-            }            
+            $(git diff --exit-code | if (echo $? == 1) {echo "*** git add go.sum ***"})
+            
+            
   test:
     docker:
       - image: shimit/mbt_multi:0.3.0
