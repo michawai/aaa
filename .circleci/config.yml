@@ -15,9 +15,9 @@ jobs:
             echo "*** BUILD ***"
             sed  -i "s/Hi/Bye/" ./README.txt
             git status
-            git add ./README.txt ./VERSION
+            git add ./VERSION
             git status
-            
+            git commit --allow-empty -m "chore: update go.sum"
   test:
     docker:
       - image: shimit/mbt_multi:0.3.0
