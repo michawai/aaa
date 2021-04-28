@@ -18,7 +18,7 @@ jobs:
             echo "*** BUILD ***"
             sed  -i "s/Hi/Bye/" ./README.txt
             git status
-            git add ./VERSION
+            git add ./README.txt
             git status
             git config user.email "${MICHAWAI_REPO_USER_EMAIL}"
             git config user.name "${MICHAWAI_USER}"
