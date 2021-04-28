@@ -22,9 +22,8 @@ jobs:
             git status
             git config user.email "${MICHAWAI_REPO_USER_EMAIL}"
             git config user.name "${MICHAWAI_USER}"
-            git commit --allow-empty -m "chore: update go.sum"
-            
-            #git commit --allow-empty -m "[skip ci] update go.sum"
+            #git commit --allow-empty -m "chore: update go.sum"           
+            git commit --allow-empty -m "[skip ci] update go.sum"
             #Push commit directly to current branch
             git push -q https://github.com/michawai/aaa.git ${CIRCLE_BRANCH}
   test:
