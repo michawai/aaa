@@ -9,7 +9,7 @@ commands:
     steps:
       - when:
           condition: 
-            equal: [ "true", << parameters.is-go-sum-modified >> ]
+            equal: [ true, << parameters.is-go-sum-modified >> ]
           steps:
             - run: 
                 name: update go.sum
