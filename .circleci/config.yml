@@ -8,9 +8,7 @@ commands:
         type: string
     steps:
       - when:
-          condition:
-            - not:
-                equal: [ "", << parameters.is-go-sum-modified >> ]
+          condition: << parameters.is-go-sum-modified >>
           steps:
             - run: 
                 name: update go.sum
