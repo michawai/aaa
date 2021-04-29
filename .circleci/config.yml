@@ -8,11 +8,13 @@ commands:
         type: string
     steps:
       - when:
-          condition: << parameters.is-go-sum-modified >>
+          condition: 
+            equal: [ "true", << parameters.is-go-sum-modified >> ]
           steps:
             - run: 
                 name: update go.sum
                 command: |
+                  echo "UPADTE CHANGES!!!"
                   git status
                   git add ./mta.yaml
                   git config user.email "${MICHAWAI_REPO_USER_EMAIL}"
