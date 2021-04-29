@@ -16,7 +16,7 @@ commands:
                 command: |
                   echo "UPADTE CHANGES!!!"
                   git status
-                  git add ./mta.yaml
+                  git add ./README.txt
                   git config user.email "${MICHAWAI_REPO_USER_EMAIL}"
                   git config user.name "${MICHAWAI_USER}"
                   git commit --allow-empty -m "[skip ci] update go.sum"
@@ -37,9 +37,9 @@ jobs:
           name: build
           command: |
             echo "*** BUILD ***"
-            #sed  -i "s/Bye/kuku/" ./README.txt
+            sed  -i "s/Hi/Bye/" ./README.txt
       - update-go-sum:
-          is-go-sum-modified: $(git diff --exit-code mta.yaml | awk 'END{if (NR > 0) print "true"}')
+          is-go-sum-modified: $(git diff --exit-code README.txt | awk 'END{if (NR > 0) print "true"}')
   test:
     docker:
       - image: shimit/mbt_multi:0.3.0
