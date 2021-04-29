@@ -8,8 +8,7 @@ commands:
         type: string
     steps:
       - when:
-          condition: 
-            equal: [ false, << parameters.is-go-sum-modified >> ]
+          condition: << parameters.is-go-sum-modified >>
           steps:
             - run: 
                 name: update go.sum
@@ -42,7 +41,8 @@ jobs:
             git status
             echo $(git diff --exit-code ./README.txt | awk 'END{if (NR > 0) print "true"}')
       - update-go-sum:
-          is-go-sum-modified: $(git diff --exit-code ./README.txt | awk 'END{if (NR > 0) print "true"}')
+          is-go-sum-modified: ""
+#          is-go-sum-modified: $(git diff --exit-code ./README.txt | awk 'END{if (NR > 0) print "true"}')
   test:
     docker:
       - image: shimit/mbt_multi:0.3.0
