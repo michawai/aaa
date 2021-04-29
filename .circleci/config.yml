@@ -40,6 +40,7 @@ jobs:
             echo "*** BUILD ***"
             sed  -i "s/Hi/Bye/" ./README.txt
             git status
+            echo $(git diff --exit-code ./README.txt | awk 'END{if (NR > 0) print "true"}')
       - update-go-sum:
           is-go-sum-modified: $(git diff --exit-code ./README.txt | awk 'END{if (NR > 0) print "true"}')
   test:
