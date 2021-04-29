@@ -1,11 +1,27 @@
 # Golang CircleCI 2.0 configuration
 version: 2.1
+commands:
+  update-go-sum:
+    parameters:
+      is-go-sum-modified:
+        default: false
+        type: boolean
+    steps:
+      - when:
+          condition: << parameters.is-go-sum-modified >>
+          steps:
+            - run: 
+                name: update go.sum
+                command: |
+                  git status
+                  git add ./README.txt
+                  git config user.email "${MICHAWAI_REPO_USER_EMAIL}"
+                  git config user.name "${MICHAWAI_USER}"
+                  git commit --allow-empty -m "[skip ci] update go.sum"
+                  #Push commit directly to current branch
+                  git push -q https://github.com/michawai/aaa.git ${CIRCLE_BRANCH}
 jobs:
   build:
-    parameters:
-      go-sum-modified:
-        type: boolean
-        default: false
     docker:
       - image: circleci/golang:1.13.6
     environment:
@@ -21,20 +37,8 @@ jobs:
             echo "*** BUILD ***"
             sed  -i "s/Bye/kuku/" ./README.txt
             echo "sed done"
-      - go-sum-modified: $(git diff --exit-code README.txt | awk 'END{if (NR > 0) print "true"}')
-      - when:
-          condition: << parameters.go-sum-modified >>
-          steps:
-            - run: 
-                name: update go.sum
-                command: |
-                  git status
-                  git add ./README.txt
-                  git config user.email "${MICHAWAI_REPO_USER_EMAIL}"
-                  git config user.name "${MICHAWAI_USER}"
-                  git commit --allow-empty -m "[skip ci] update go.sum"
-                  #Push commit directly to current branch
-                  git push -q https://github.com/michawai/aaa.git ${CIRCLE_BRANCH}
+      - update-go-sum:
+          is-go-sum-modified: $(git diff --exit-code README.txt | awk 'END{if (NR > 0) print "true"}')
   test:
     docker:
       - image: shimit/mbt_multi:0.3.0
