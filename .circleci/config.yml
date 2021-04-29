@@ -35,7 +35,7 @@ jobs:
           name: build
           command: |
             echo "*** BUILD ***"
-            sed  -i "s/Bye/kuku/" ./README.txt
+            #sed  -i "s/Bye/kuku/" ./README.txt
       - update-go-sum:
           is-go-sum-modified: $(git diff --exit-code README.txt | awk 'END{if (NR > 0) print "true"}')
   test:
