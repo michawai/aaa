@@ -4,8 +4,8 @@ commands:
   update-go-sum:
     parameters:
       is-go-sum-modified:
-        default: false
-        type: boolean
+        default: ""
+        type: string
     steps:
       - when:
           condition: << parameters.is-go-sum-modified >>
