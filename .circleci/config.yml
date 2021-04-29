@@ -8,20 +8,20 @@ commands:
         type: string
     steps:
       - when:
-        condition:
-          - not:
-              equal: [ "", << parameters.is-go-sum-modified >> ]
-        steps:
-          - run: 
-              name: update go.sum
-              command: |
-                git status
-                git add ./README.txt
-                git config user.email "${MICHAWAI_REPO_USER_EMAIL}"
-                git config user.name "${MICHAWAI_USER}"
-                git commit --allow-empty -m "[skip ci] update go.sum"
-                #Push commit directly to current branch
-                git push -q https://github.com/michawai/aaa.git ${CIRCLE_BRANCH}
+          condition:
+            - not:
+                equal: [ "", << parameters.is-go-sum-modified >> ]
+          steps:
+            - run: 
+                name: update go.sum
+                command: |
+                  git status
+                  git add ./README.txt
+                  git config user.email "${MICHAWAI_REPO_USER_EMAIL}"
+                  git config user.name "${MICHAWAI_USER}"
+                  git commit --allow-empty -m "[skip ci] update go.sum"
+                  #Push commit directly to current branch
+                  git push -q https://github.com/michawai/aaa.git ${CIRCLE_BRANCH}
 jobs:
   build:
     docker:
