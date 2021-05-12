@@ -42,7 +42,7 @@ jobs:
             sed  -i "s/Hi/Bye/" ./README.txt
             git status
             MODIFIED=$(git diff --exit-code ./mta.yaml | awk 'END{if (NR > 0) print "true"}')
-            echo "run: ${MODIFIED}"
+            echo $MODIFIED
       - update-go-sum:
 #          is-go-sum-modified: ""
           is-go-sum-modified: $MODIFIED
