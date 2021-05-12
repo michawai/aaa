@@ -42,8 +42,10 @@ jobs:
             sed  -i "s/Hi/Bye/" ./README.txt
             git status
             MODIFIED=$(git diff --exit-code ./mta.yaml | awk 'END{if (NR > 0) print "true"}')
+            echo "run: ${MODIFIED}"
       - update-go-sum:
 #          is-go-sum-modified: ""
+          echo "update-go-sum: ${MODIFIED}"
           is-go-sum-modified: $MODIFIED
   test:
     docker:
