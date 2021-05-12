@@ -45,7 +45,6 @@ jobs:
             echo "run: ${MODIFIED}"
       - update-go-sum:
 #          is-go-sum-modified: ""
-          echo "update-go-sum: ${MODIFIED}"
           is-go-sum-modified: $MODIFIED
   test:
     docker:
