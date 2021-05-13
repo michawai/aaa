@@ -15,7 +15,8 @@ commands:
             - run: 
                 name: update go.sum
                 command: |
-                  echo "UPADTE CHANGES: $parameters.is-go-sum-modified"
+                  echo "UPADTE CHANGES: ${parameters.is-go-sum-modified}"
+                  echo "UPADTE CHANGES: ${MODIFIED}"
                   git status
                   git add ./README.txt
                   git config user.email "${MICHAWAI_REPO_USER_EMAIL}"
