@@ -4,13 +4,13 @@ commands:
   update-go-sum:
     parameters:
       is-go-sum-modified:
-        default: "false"
-        type: string
+        default: false
+        type: boolean
     steps:
       - when:
           condition: 
             not:
-              equal: [ "false", << parameters.is-go-sum-modified >> ]
+              equal: [ false, << parameters.is-go-sum-modified >> ]
           steps:
             - run: 
                 name: update go.sum
