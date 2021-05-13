@@ -40,11 +40,11 @@ jobs:
           command: |
             echo "*** BUILD ***"
             git status
-            export MODIFIED=$(git diff --exit-code ./README.txt | awk 'END{if (NR > 0) {print "true"} else {print "false"}}')
+            MODIFIED=$(git diff --exit-code ./README.txt | awk 'END{if (NR > 0) {print "true"} else {print "false"}}')
             echo "*** MODIFIED: $MODIFIED ***"
       - update-go-sum:
-          is-go-sum-modified: "false"
-#          is-go-sum-modified: "$MODIFIED"
+#          is-go-sum-modified: "false"
+          is-go-sum-modified: "$MODIFIED"
   test:
     docker:
       - image: shimit/mbt_multi:0.3.0
