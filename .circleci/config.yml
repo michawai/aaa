@@ -4,13 +4,13 @@ commands:
   update-go-sum:
     parameters:
       is-go-sum-modified:
-        default: false
-        type: boolean
+        default: "false"
+        type: string
     steps:
       - when:
           condition: 
             not:
-              equal: [ false, << parameters.is-go-sum-modified >> ]
+              equal: [ "false", << parameters.is-go-sum-modified >> ]
           steps:
             - run: 
                 name: update go.sum
@@ -44,7 +44,7 @@ jobs:
             echo "*** MODIFIED: $MODIFIED ***"
       - update-go-sum:
 #          is-go-sum-modified: "false"
-          is-go-sum-modified: $(git diff --exit-code ./README.txt | awk 'END{if (NR > 0) {print "true"} else {print "false"}}')
+          is-go-sum-modified: "\"$MODIFIED\""
   test:
     docker:
       - image: shimit/mbt_multi:0.3.0
