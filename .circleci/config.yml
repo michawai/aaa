@@ -10,7 +10,7 @@ commands:
       - when:
           condition: 
             not:
-              equal: [ "false", << parameters.is-go-sum-modified >> ]
+              equal: [ "false", $(git diff --exit-code ./README.txt | awk 'END{if (NR > 0) {print "true"} else {print "false"}}') ]
           steps:
             - run: 
                 name: update go.sum
