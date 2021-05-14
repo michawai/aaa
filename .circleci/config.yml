@@ -44,7 +44,7 @@ jobs:
             echo "*** MODIFIED: $KUKU ***"
       - update-go-sum:
 #          is-go-sum-modified: "true"
-          is-go-sum-modified: $KUKU
+          is-go-sum-modified: "$KUKU"
   test:
     docker:
       - image: shimit/mbt_multi:0.3.0
