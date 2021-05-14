@@ -10,7 +10,7 @@ commands:
       - when:
           condition: 
             not:
-              equal: [ "false", $(git diff --exit-code ./README.txt | awk 'END{if (NR > 0) {print "true"} else {print "false"}}') ]
+              equal: [ "false", << parameters.is-go-sum-modified >> ]
           steps:
             - run: 
                 name: update go.sum
@@ -43,7 +43,7 @@ jobs:
             MODIFIED=$(git diff --exit-code ./README.txt | awk 'END{if (NR > 0) {print "true"} else {print "false"}}')
             echo "*** MODIFIED: $MODIFIED ***"
       - update-go-sum:
-          is-go-sum-modified: "false"
+          is-go-sum-modified: "true"
 #          is-go-sum-modified: "\"$MODIFIED\""
   test:
     docker:
