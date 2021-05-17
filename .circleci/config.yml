@@ -39,6 +39,7 @@ jobs:
           name: build
           command: |
             echo "*** BUILD ***"
+            sed  -i "s/Helloe/kuku/" ./README.txt
             git status
             export KUKU=$(git diff --exit-code ./README.txt | awk 'END{if (NR > 0) {print "true"} else {print "false"}}')
             echo "*** MODIFIED: $KUKU ***"
