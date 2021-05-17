@@ -2,10 +2,9 @@
 
 set -o nounset
 set -o errexit
-set -o pipefail
 
 export MODIFIED=$(git diff --exit-code ./README.txt | awk 'END{if (NR > 0) {print "true"} else {print "false"}}')
-if [ "${MODIFIED}" == "true" ]; then
+if [[ "${MODIFIED}" == "true" ]]; then
   echo "UPADTE CHANGES: ${MODIFIED}"
   git status
   git add ./README.txt
