@@ -1,29 +1,6 @@
 # Golang CircleCI 2.0 configuration
 version: 2.1
-commands:
-  update-go-sum:
-    parameters:
-      is-go-sum-modified:
-        default: "false"
-        type: string
-    steps:
-      - when:
-          condition: 
-            not:
-              equal: [ "false", << parameters.is-go-sum-modified >> ]
-          steps:
-            - run: 
-                name: update go.sum
-                command: |
-                  echo "UPADTE CHANGES: << parameters.is-go-sum-modified >>"
-                  git status
-                  git add ./README.txt
-                  git config user.email "${MICHAWAI_REPO_USER_EMAIL}"
-                  git config user.name "${MICHAWAI_USER}"
-                  git commit --allow-empty -m "[skip ci] update go.sum"
-                  #Push commit directly to current branch
-                  git push -q https://github.com/michawai/aaa.git ${CIRCLE_BRANCH}
-                  
+
 jobs:
   build:
     docker:
@@ -39,14 +16,12 @@ jobs:
           name: build
           command: |
             echo "*** BUILD ***"
-            sed  -i "s/Helloe/kuku/" ./README.txt
+            sed  -i "s/kuku/bubu/" ./README.txt
             git status
             export KUKU=$(git diff --exit-code ./README.txt | awk 'END{if (NR > 0) {print "true"} else {print "false"}}')
             echo "*** MODIFIED: $KUKU ***"
             sh $PWD/scripts/update_go_sum
-#      - update-go-sum:
-#          is-go-sum-modified: "true"
-#          is-go-sum-modified: "${KUKU}"
+            
   test:
     docker:
       - image: shimit/mbt_multi:0.3.0
