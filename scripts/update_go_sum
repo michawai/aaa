@@ -14,4 +14,6 @@ if [ "$MODIFIED" = "true" ]; then
   #Push commit directly to current branch
   git push -q https://github.com/michawai/aaa.git ${CIRCLE_BRANCH}
   echo "Push updated go.sum"
+elif [ "$MODIFIED" == "false" ]; then
+  echo "FALSE"
 fi
