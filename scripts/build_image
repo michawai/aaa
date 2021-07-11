@@ -21,8 +21,8 @@ fi
 echo "$DOCKER_REGISTRY_TOKEN" | docker login $DOCKER_REGISTRY --username $DOCKER_REGISTRY_USER --password-stdin
 echo "Release micht:${MBT_VERSION} to $DOCKER_REGISTRY"
 docker build -t micht:${MBT_VERSION} .
-docker-compose -f ./docker-compose.test.yml up --build
+#docker-compose -f ./docker-compose.test.yml up --build
 docker tag micht:${MBT_VERSION} ${IMAGE_PREFIX}/micht:${MBT_VERSION}
-#docker push ${IMAGE_PREFIX}/micht:${MBT_VERSION}
+docker push ${IMAGE_PREFIX}/micht:${MBT_VERSION}
 #docker tag micht:${MBT_VERSION} ${IMAGE_PREFIX}/micht:latest
 #docker push ${IMAGE_PREFIX}/micht:latest
