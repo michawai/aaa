@@ -86,16 +86,6 @@ jobs:
             #Tag
             git tag -a v${MBT_VERSION} -m "New release ${MBT_VERSION}"
             git push https://github.com/michawai/aaa.git v${MBT_VERSION}
-            #Update new version in docker branch
-            git checkout docker
-            sed  -i "/ARG MBT_VERSION=/ s/${CURR_MBT_VERSION}/${MBT_VERSION}/" ./Dockerfile
-            sed  -i "/ARG MBT_VERSION=/ s/${CURR_MBT_VERSION}/${MBT_VERSION}/" ./alpine/Dockerfile
-            git add ./Dockerfile ./alpine/Dockerfile
-            git config user.email "${MICHAWAI_REPO_USER_EMAIL}"
-            git config user.name "${MICHAWAI_USER}"
-            git commit --allow-empty -m "[skip ci] Bump version ${MBT_VERSION}"
-            #Push commit directly to docker branch
-            git push https://github.com/michawai/aaa.git docker
       - run:
           name: release new version
           command: |
@@ -140,29 +130,14 @@ jobs:
       - run:
           name: release image
           command: |
+            #Make sure HEAD points to master
+            git checkout master
+            git fetch
+            git rebase
             MBT_VERSION=$(cat ./VERSION)
             echo "Image release: ${MBT_VERSION}"
-            git checkout docker	    
-            echo "Release michci:latest"
-            docker build -t michci:latest .
-            docker login ghcr.io -u michawai -p ${MICHAWAI_GITHUB_TOKEN}
-            docker tag michci:latest ghcr.io/michawai/aaa/michci:latest
-            docker push ghcr.io/michawai/aaa/michci:latest
-            echo "Release michci:${MBT_VERSION}"
-            docker build -t michci:${MBT_VERSION} .
-            docker login ghcr.io -u michawai -p ${MICHAWAI_GITHUB_TOKEN}
-            docker tag michci:${MBT_VERSION} ghcr.io/michawai/aaa/michci:$MBT_VERSION
-            docker push ghcr.io/michawai/aaa/michci:$MBT_VERSION
-            echo "Release michci-alpine:latest"
-            docker build -t michci-alpine:latest .
-            docker login ghcr.io -u michawai -p ${MICHAWAI_GITHUB_TOKEN}
-            docker tag michci-alpine:latest ghcr.io/michawai/aaa/michci-alpine:latest
-            docker push ghcr.io/michawai/aaa/michci-alpine:latest
-            echo "Release michci-alpine:${MBT_VERSION}"
-            docker build -t michci-alpine:${MBT_VERSION} .
-            docker login ghcr.io -u michawai -p ${MICHAWAI_GITHUB_TOKEN}
-            docker tag michci-alpine:${MBT_VERSION} ghcr.io/michawai/aaa/michci-alpine:$MBT_VERSION
-            docker push ghcr.io/michawai/aaa/michci-alpine:$MBT_VERSION
+            #Push to Docker Hub
+            sh $PWD/scripts/build_image ${MBT_VERSION} ${DOCKER_HUB_USER} ${DOCKER_HUB_TOKEN} "https://registry.hub.docker.com"
 
   ghpages:
     docker:
