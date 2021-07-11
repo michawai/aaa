@@ -1,0 +1,29 @@
+#!/bin/sh
+
+set -o nonunset
+set -o errexit
+
+# set readable variables
+export MBT_VERSION="$1"
+export DOCKER_REGISTRY_USER="$2"
+export DOCKER_REGISTRY_TOKEN="$3"
+export DOCKER_REGISTRY="$4"
+
+# set image prefix by docker registry
+if [ "$DOCKER_REGISTRY" = "kuku1" ]; then
+  export IMAGE_PREFIX="kuku1"
+elif [ "$DOCKER_REGISTRY" = "kuku2" ]; then
+  export IMAGE_PREFIX="kuku2"
+else
+	export IMAGE_PREFIX="michdock"
+fi
+
+# build image
+echo "$DOCKER_REGISTRY_TOKEN" | docker login $DOCKER_REGISTRY --username $DOCKER_REGISTRY_USER --password-stdin
+echo "Release micht:${MBT_VERSION} to $DOCKER_REGISTRY"
+docker build -t micht:${MBT_VERSION} .
+docker-compose -f ./docker-compose.test.yml up --build
+docker tag micht:${MBT_VERSION} ${IMAGE_PREFIX}/micht:${MBT_VERSION}
+#docker push ${IMAGE_PREFIX}/micht:${MBT_VERSION}
+#docker tag micht:${MBT_VERSION} ${IMAGE_PREFIX}/micht:latest
+#docker push ${IMAGE_PREFIX}/micht:latest
