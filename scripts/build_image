@@ -17,7 +17,7 @@ fi
 
 # build image
 echo "Login to ${DOCKER_REGISTRY}"
-echo "$DOCKER_REGISTRY_TOKEN" | docker login ${DOCKER_REGISTRY} --username ${DOCKER_REGISTRY_USER} --password-stdin
+echo "$DOCKER_REGISTRY_TOKEN" | docker login --username ${DOCKER_REGISTRY_USER} --password-stdin
 echo "Build micht:${MBT_VERSION}"
 docker build -t micht:${MBT_VERSION} .
 #docker-compose -f ./docker-compose.test.yml up --build
