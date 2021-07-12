@@ -139,7 +139,7 @@ jobs:
             MBT_VERSION=$(cat ./VERSION)
             echo "Image release: ${MBT_VERSION}"
             #Push to Docker Hub
-            sh $PWD/scripts/build_image ${MBT_VERSION} ${DOCKER_HUB_USER} ${DOCKER_HUB_TOKEN} "https://registry.hub.docker.com"
+            sh $PWD/scripts/build_image ${MBT_VERSION} ${DOCKER_HUB_USER} ${DOCKER_HUB_TOKEN} "kuku2" "https://registry.hub.docker.com"
 
   ghpages:
     docker:
