@@ -12,7 +12,7 @@ if [ "$DOCKER_REGISTRY" = "kuku1" ]; then
 elif [ "$DOCKER_REGISTRY" = "kuku2" ]; then
   export IMAGE_PREFIX="kuku2"
 else
-	export IMAGE_PREFIX="michdock"
+  export IMAGE_PREFIX="michdock"
 fi
 
 # build image
@@ -24,6 +24,6 @@ docker build -t micht:${MBT_VERSION} .
 echo "Tag ${IMAGE_PREFIX}/micht:${MBT_VERSION}"
 docker tag micht:${MBT_VERSION} ${IMAGE_PREFIX}/micht:${MBT_VERSION}
 echo "Push micht:${MBT_VERSION} to $DOCKER_REGISTRY"
-docker push ${IMAGE_PREFIX}/micht:${MBT_VERSION}
+#docker push ${IMAGE_PREFIX}/micht:${MBT_VERSION}
 #docker tag micht:${MBT_VERSION} ${IMAGE_PREFIX}/micht:latest
 #docker push ${IMAGE_PREFIX}/micht:latest
