@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # set readable variables
 export MBT_VERSION="$1"
